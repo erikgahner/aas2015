@@ -14,7 +14,7 @@
 
 Gelman, A. & J. Hill. 2007. _Data Analysis Using Regression and Multilevel/Hierarchical Models._ New York: Cambridge University Press. (Chapter 9.1, 9.2, 9.3 and 9.6) (13 pages)
 
-Druckman, J. N. & A. Lupia. 2012. Experimenting with Politics. _Science_ 335(6073): 1177-1179 (3 pages)
+Druckman, J. N. & A. Lupia. 2012. Experimenting with Politics. _Science_ 335(6073): 1177-1179 (3 pages) ([gated](http://www.sciencemag.org/content/335/6073/1177), [ungated](http://faculty.wcas.northwestern.edu/~jnd260/pub/Druckman%20Lupia%20Science%202012.pdf))
 
 Gerber, A. S. & D. P. Green. 2012. _Field Experiments: Design, Analysis, and Interpretation_. New York: W. W. Norton & Company, Inc. (Chapter 2) (compendium, 30 pages)
 
@@ -34,7 +34,6 @@ Rubin, D. B. 2008. For Objective Causal Inference, Design Trumps Analysis. _The 
 
 Blom-Hansen, J. & S. Serritzlew. 2014. Endogenitet og eksperimenter – forskningsdesignet som løsning. _politica_ 46(1):5-23.
 
- 
 ### Lecture 11: Matching and Propensity Scores
 
 **Required readings:**
