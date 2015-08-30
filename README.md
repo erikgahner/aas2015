@@ -1,5 +1,15 @@
 # Advanced Applied Statistics, 2015
 
+## Course and repository description
+
+Advanced Applied Statistics provide students with the tools and knowledge required to conduct empirical analyses with relevance for academic as well as practical work. 
+
+The course is teached together with Sune Welling Hansen and Robert Klemmensen. This folder containts material related to the four lectures teached by Erik Gahner Larsen. More specifically: 
+
+- A detailed description of the course (`coursedescription.pdf`)
+- An overview of the required and recommended readings (with hyperlinks when possible)
+- Teaching material in the form of HTML slides and Rmd files needed to reproduce the slides
+
 ## Slides
 
 - Lecture 10: Experiments and Causal Inference
