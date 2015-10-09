@@ -1,0 +1,170 @@
+---
+title: "Lab 1: Linear regression"
+author: Erik Gahner Larsen
+date: Advanced applied statistics, 2015
+output:
+  slidy_presentation:
+    mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+---
+
+```{r include=FALSE}
+library(ggplot2)
+
+```
+
+## Everything you need to know about me (in 30 seconds or less)
+
+- Erik
+
+- Interest(s): Design-based causal inference, experiments
+
+- Mail: erikgahner@gmail.com / egl@sam.sdu.dk
+
+## Goal of lab sessions
+
+- Work with STATA/R 
+- Learn to do awesome __and__ useful stuff
+    + Relevant for mandatory assignments, the exam, thesis, work etc.
+
+- You will get the code (as R scripts and STATA do-files)
+    + Your job is to make it your own (understand the code, add interpretations and stuff)
+
+## Today
+
+- Having fun with statistics, or: Work with tasks
+    + Calculate standard errors and confidence intervals
+    + Test for mean differences (t-test)
+    + Linear regression (simple and multiple)
+    + Interaction terms
+- If you can do this: The first mandatory assignment will be a walk in the park.
+
+## Mandatory assignment: Linear regression
+
+- You can write it in Danish or English (we recommend the latter option)
+- If you think it is too easy, use it as an opportunity to try R (or STATA)
+- Important dates
+    - Hand-out date: Today
+    - Due date: 16 September (Wednesday)
+    - Feedback: 23 September (Wednesday)
+    - Resubmission: 30 September (Wednesday)
+
+
+## On differences in statistical significance
+
+- "The difference between significant and not significant is not itself statistically significant"
+
+- "Statistical significance, in some form, is a way to assess the reliability of statistical findings. However, as we have seen, comparisons of the sort, "X is statistically significant but Y is not," can be misleading."
+
+- Source: Gelman, A. and H. Stern. 2006. The Difference Between "Significant" and "Not Significant" is not Itself Statistically Significant. _The American Statistician_. 60(4), 328-331
+
+## If in doubt, draw it out.
+
+```{r, echo=FALSE}
+# Create data frame
+ss.df <- data.frame(study=c("1","2"), effect = c(25,10), se=c(10,10))
+
+# Draw figure
+ggplot(ss.df, aes(x=study, y=effect)) + 
+  geom_bar(position=position_dodge(), width=.5, fill="gray60", stat="identity") + 
+  geom_errorbar(aes(ymin=effect-1.96*se, ymax=effect+1.96*se), width=.1, position=position_dodge(.9)) + 
+  ylab("Effect size") + 
+  xlab("Study") + 
+  geom_hline(yintercept=0) +
+  theme_minimal()
+```
+
+## Any problems?
+
+- Do you have an installation of STATA and R?
+- Any feedback?
+    - Lectures?
+    - Literature? 
+    - A waste of time?
+
+## Now
+
+- Go to BlackBoard
+- Download files for `lab 1`
+- Work with the tasks
+- If you need help, ask.
+- Work in groups or alone
+
+## Task 1
+
+Between country differences in average political knowledge
+
+    a) Compare the country (group) means of political knowledge scores to each-other.
+    
+    b) Construct and interpret confidence intervals for the grand mean as well as 
+    for each of the group means.
+    
+    c) Conduct and interpret a t-test of the difference in group means.
+    
+## Task 2
+
+Next, investigate the relationship between religiosity (predictor) and leftright
+ideological self-placement using simple linear regression. Use either
+the Danish or the Polish sample.
+
+    a) Start by illustrating the relationship between these two.
+    
+    b) Next, interpret the point and interval estimates for the intercept and 
+    slope from a bivariate regression.
+    
+    c) Finally, interpret the standardized coefficient for religiosity.
+    
+## Task 3
+
+It is now time to add additional covariates to our model: age, education, gender, and investigate whether this affects the relationship between religiosity and ideological self-placement.
+
+    a) Start by discussing why we want to add these additional variables to our model.
+    
+    b) Investigate this multivariate relationship using multiple linear regression.
+    
+    c) Display the relationship between religiosity and ideological positions based 
+    on your multivariate model, fixing other predictors to meaningful values. 
+    Try out at least two different set of "hypothetical individuals".
+
+## Task 4
+
+Finally, investigate whether the effect of religiosity on ideological placement is conditional on age.
+
+    a) Estimate a multiple linear regression which allows for this conditionality.
+    
+    b) Illustrate the conditionality.
+
+
+## Mandatory assignment
+
+    1. Examine the bivariate and multivariate relationship between gender 
+    (female) and political knowledge (polinfo, y ) in Poland. At a minimum, 
+    consider the following third variables: age, education, political interest.
+
+    2. Investigate also possible parameter heterogeneity in the relationship 
+    between gender and political knowledge (using interactions).
+
+    3. Illustrate graphically the key results from your analysis, especially 
+    where you find indications of heterogeneity in the gender gap.
+
+    4. Export your empirical results using an appropriate command (Stata: 
+    e.g., outreg2; R: e.g., texreg). Report the results from your regressions 
+    in a single table. The table's format and content must conform to the 
+    usual standards for such tables.
+
+## A few words of advice
+
+- Make your shit reproducible
+    - Irreproducible science is an oxymoron
+    - If nobody can reproduce your results, __you__ are doing something wrong.
+
+- Do not conduct a misleading interaction analysis
+    - Plot and discuss the distribution of the variables (e.g. histograms)
+    - Plot and discuss the uncertainty in your estimates (e.g. 95% confidence intervals)
+    - Remember substantial interpretation
+    
+    
+## Good luck with the assignment
+
+- Feel free to stop by my office
+
+----

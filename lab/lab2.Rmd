@@ -1,0 +1,244 @@
+---
+title: "Lab 2"
+subtitle: "Data simulation and binary logistic regression"
+author: Erik Gahner Larsen
+date: Advanced applied statistics, 2015
+output:
+  ioslides_presentation:
+    mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+---
+
+```{r include=FALSE}
+library(ggplot2)
+
+ma1.df <- data.frame( 
+  danish =          c(1,1,1,1,1,1,1,1,0,1,1,0,1,0,1,1,1,1,0,0,1),
+  assignment =      c(1:21),
+  
+  overall =         c(1,2,3,2,3,2,3,3,2,2,2,0,2,3,2,3,3,3,2,2,1),
+  substantial =     c(1,3,3,3,2,2,2,3,2,3,2,0,2,3,1,2,2,3,1,2,0),
+  app.r =           c(2,2,3,3,3,2,3,2,2,3,2,2,3,3,2,2,3,2,3,0,2),
+  app.v =           c(3,0,3,2,1,2,1,3,1,2,0,3,3,2,2,1,2,3,2,3,2),
+  bivariate =       c(2,3,3,2,2,2,2,2,3,2,2,1,2,3,1,3,2,3,2,2,2),
+  multivariate =    c(1,2,3,2,2,2,2,2,2,2,2,1,2,2,2,2,3,3,1,2,0),
+  interaction =     c(1,1,3,2,2,2,2,3,1,2,2,1,1,2,2,3,2,3,1,3,1),
+  visualization =   c(0,3,3,2,3,1,3,2,2,2,0,1,3,2,1,0,3,3,1,1,0),
+  table =           c(2,0,3,3,3,3,3,3,0,3,3,2,3,3,3,3,3,3,3,0,3)
+  )
+```
+
+## Today
+
+- Mandatory assignment 1
+
+- OVB and logit regression
+
+## Mandatory assignment 1
+
+1. Examine the bivariate and multivariate relationship between gender (female) and political knowledge (polinfo, y ) in Poland. At a minimum, consider the following third variables: age, education, political interest.
+
+2. Investigate also possible parameter heterogeneity in the relationship between gender and political knowledge (using interactions).
+
+3. Illustrate graphically the key results from your analysis, especially where you find indications of heterogeneity in the gender gap.
+
+4. Export your empirical results using an appropriate command (Stata: e.g., outreg2; R: e.g., texreg). Report the results from your regressions in a single table. The table's format and content must conform to the usual standards for such tables.
+
+## MA1, language
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=danish)) + 
+  geom_dotplot(binwidth = .1, fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1), labels=c("English","Danish")) +
+  coord_flip()
+```
+
+## MA1, overall dissemination 
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=overall)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, overall dissemination 
+
+- Remember to have a short introduction and conclusion
+- Describe the methods. What are we doing? And why?
+- Do everything you are asked to do
+    - No need to do more than that
+
+## MA1, substantial interpretation
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=substantial)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, substantial interpretation
+
+- Make substantial interpretations! 
+    - Write and discuss: "Men have, on average, one more correct answer than women."
+    - Is that a lot? Maybe, maybe not.
+    
+- Make substantial interpretations in **all** analyses
+
+## MA1, reproducibility
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=app.r)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, reproducibility
+
+- Overall: Great job!
+
+- Make it easy to read
+
+- Be sure to make it all anonymous
+    - Also when you load your data set
+
+- Try not to include all your output as code
+
+## MA1, descriptive statistics
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=app.v)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, descriptive statistics
+
+- Remember mean, standard deviation etc.
+
+- Include as much information as possible
+
+## MA1, bivariate (task 1a)
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=bivariate)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, bivariate (task 1a)
+
+- t-test or simple regression
+    - Same result
+
+- Again: Remember the substantial interpretation
+
+## MA1, multivariate (task 1b)
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=multivariate)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, multivariate (task 1b)
+
+- Discuss the effect from the bivariate regression in relation to the effect from the multivariate regression.
+
+- Discuss the different predictors (statistically and substantially)
+
+## MA1, interaction (task 2)
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=interaction)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, interaction (task 2)
+
+- Explain the logic. When and why do you want to include an interaction term? What is happening when we do it? 
+
+## MA1, visualization (task 3)
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=visualization)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+## MA1, visualization (task 3)
+
+- Plot (and interpret) the marginal effects
+
+## MA1, table export (task 4)
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(ma1.df, aes(x=table)) + 
+  geom_dotplot(binwidth = .2, stackgroups = TRUE, binpositions="all", fill="red", alpha=.7) + 
+  theme_minimal() +
+  scale_y_continuous("", breaks=c(0), labels=c("")) +
+  scale_x_continuous("", breaks=c(0,1,2,3), labels=c("Missing","Below average","Average","Above average")) +
+  geom_vline(xintercept=.5, type=2) +
+  coord_flip()
+```
+
+
+## Questions or comments?
+
+- If not now, send me a mail.
+
+
+## Tasks for lab session 2
+
+Two tasks
+
+a) Omitted variable bias (lecture 3)
+    
+b) Binary logistic regression (lecture 4)
+
+## Now
+
+- Go to BlackBoard
+- Download files for `lab 2`
+- Work with the tasks
+- If you need help, ask.
+- Work in groups or alone
+    
+## See you next week
+
+- Questions? Mail me or feel free to stop by my office
+
+----

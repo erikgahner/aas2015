@@ -1,0 +1,178 @@
+---
+title: Experiments and Causal Inference
+author: Erik Gahner Larsen
+date: Advanced applied statistics, 2015
+output:
+      slidy_presentation:
+      mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+---
+
+```{r include=FALSE}
+library(ggplot2)
+```
+
+## Experiments in political science research
+
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+
+apsr.experiments <- data.frame(
+  year = c(0:20),
+  articles = c(rep(0,10),1,0,3,2,5,5,6,10,11,12,16)
+)
+
+ggplot(apsr.experiments, aes(x=year, y=articles)) + 
+  geom_line() +
+  geom_point() + 
+  theme_minimal() +
+  scale_x_continuous("", breaks=apsr.experiments$year, labels=c("1906-09","1910-14","1915-19","1920-24","1925-29","1930-34","1935-39","1940-44","1945-49","1950-54","1955-59","1960-64","1964-69","1970-74","1975-79","1980-84","1985-89","1990-94","1995-99","2000-04","2005-09")) +
+  ylab("Articles published in APSR") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  annotate("text", label = "Cambridge Handbook of Experimental Political Science (Druckman et al. 2011, 5)", x = 7.8, y = 16, size = 4, colour = "gray80") 
+```
+
+## "But I don't care about experiments..."
+
+- "Like it or not, social scientists rely on the logic of experimentation
+even when analyzing nonexperimental data."[^gg2003]
+
+- "In some sense every empirical researcher is reporting the results of an experiment. Every researcher who behaves as if an exogenous variable varies independently of an error term effectively views their data as coming from an experiment."[^hl2004]
+
+- "[T]here is no reason to suppose that case study research follows a divergent logic of inquiry relative to experimental research."[^gm2007]
+
+- "If you can't devise an experiment that answers your question in a world there anything goes, then the odds of generating useful results with a modest budget and nonexperimental survey data seem pretty slim. The description of an ideal experiment also helps you formulate causal questions precisely."[^ap2009p5]
+
+[^gg2003]: Page 110 in Green, D. P. and A. S. Gerber. 2003. The Underprovision of Experiments in Political Science. _The ANNALS of the American Academy of Political and Social Science_ 589(1):94-112.
+
+[^hl2004]: Page 1009 in Harrison, G. W. and J. A. List. 2004. Field Experiments. _Journal of Economic Literature_ 42(4): 1009-1055.
+
+[^gm2007]: Page 689 in Gerring, J. and R. McDermott. 2007. An Experimental Template for Case Study Research. _American Journal of Political Science_ 51(3):688-701.
+
+[^ap2009p5]: Page 5 in Angrist, J. D. and J. Pischke. 2009. _Mostly Harmless Econometrics: An Empiricist's Companion_. New Jersey: Princeton University Press.
+
+## Agenda
+
+- Background
+    + Potential outcomes
+    + Fundamental problem of causal inference 
+    + Counterfactuals
+
+- Experiments (randomization, effect estimation)
+    
+- Types of experiments 
+    + Lab, survey, field, natural, quasi
+
+- Practical guidelines
+
+## Important: What's it all about?
+
+- From estimation strategies (_statistics_) to identification strategies (_design_):
+    + "Without an experiment, a natural experiment, a discontinuity, or some other strong design, no amount of econometric or statistical modeling can make the move from correlation to causation persuasive."[^sekhon2009p503]
+    
+[^sekhon2009p503]: Page 503 in Sekhon, J. S. 2009. Opiates for the Matches: Matching Methods for Causal Inference. _Annual Review of Political Science_ 12: 487-508.
+
+- The interesting thing is not the data we have
+    + ... but the data we do __not__ have.
+
+- "Easy" to measure the factual world
+    + What about the *counter*factual world?
+
+- Key point: We need theoretical and statistical tools to make valid counterfactuals
+
+## Potential outcomes
+
+- Infinite number of potential outcomes
+
+- Outcome: Y
+
+- Treatment: 
+
+- Two potential outcomes: Y1, Y0
+
+- Remember: So far, none of these are contrafactuals
+
+
+## The Fundamental Problem of Causal Inference (FPCI)
+
+- "It is impossible to _observe_ the value of $Y_{t}(u)$ and $Y_{c}(u)$ on the same unit and, therefore, it is impossible to _observe_ the effect of $t$ on $u$."[^holland1986p947]
+    
+[^holland1986p947]: Page 947 in Holland, P. W. 1986. Statistics and Causal Inference. _Journal of the American Statistical Association_ 81(396): 945-960.
+
+- We only observe one outcome: the realised outcome
+
+## SUTVA
+
+- Stable Unit Treatment Value Assumption
+
+- Two assumptions
+
+## Types of experiments
+
+- Lab experiments
+- Survey experiments
+- Field experiments
+- Natural experiments
+- Quasi-experiments
+
+## Different types of designs (summarized and modified)[^bs2014]
+
+[^bs2014]: Page 13 in Blom-Hansen, J. and S. Serritzlew. 2014. Endogenitet og eksperimenter - forskningsdesignet som løsning. _politica_ 46(1):5-23.
+
+| Experiment    | Comparison of experiment  and control group | Exogenous or as-if  exogenous intervention | Groupings are randomized  or as-if randomized | Researcher manipulates  intervention |
+|---------------|---------------------------------------------|--------------------------------------------|-----------------------------------------------|--------------------------------------|
+| Lab           | Yes                                         | Yes                                        | Yes                                           | Yes                                  |
+| Field         | Yes                                         | Yes                                        | Yes                                           | Yes                                  |
+| Survey        | Yes                                         | Yes                                        | Yes                                           | Yes                                  |
+| Natural       | Yes                                         | Yes                                        | Yes                                           | No                                   |
+| Quasi         | Yes                                         | Yes                                        | No                                            | No                                   |
+| Observational | Yes                                         | No                                         | No                                            | No                                   |
+
+
+## What about covariates?
+
+- We use experiments so we don't have to care about covariates
+- What do we get when we use covariates?
+    + Covariates reduce noise, increasing the chance that we reach statistical significance[^mutz2011]
+
+[^mutz2011]: Page 123f in Mutz, D. 2011. _Population-Based Survey Experiments_. New Jersey: Princeton University Press.
+
+- Some are positive toward covariates for causal inferences
+    + Variables measured before the variables of interest was determined are generally good controls[^ap2009p64ff]
+    
+[^ap2009p64ff]: Page 64ff in Angrist, J. D. and J. Pischke. 2009. _Mostly Harmless Econometrics: An Empiricist's Companion_. New Jersey: Princeton University Press.
+
+- Always report the treatment effect without any covariates!
+
+- See also: [10 Things to Know About Covariate Adjustment](http://egap.org/methods-guides/10-things-know-about-covariate-adjustment)
+
+## How to conduct an experiment
+
+- Remember theory.
+
+- Specify hypothesis/hypotheses _prior_ to the data collection
+    - Preregister
+    - [What is your dependent variable?](https://xkcd.com/882/)
+
+- Imai Japense AJPS paper?
+
+
+## How to report an experiment
+
+- We have specific guidelines for reporting experimental research[^getal2014]
+
+[^getal2014]: Gerber, A., K. Arceneaux, C. Boudreau, C. Dowling, S. Hillygus, T. Palfrey, D. R. Biggers and D. J. Hendry. 2014. Reporting Guidelines for Experimental Research: A Report from the Experimental Research Section Standards Committee. _Journal of Experimental Political Science_ 1(1): 81-98.
+
+## The next week(s)
+
+- Today: Experiments
+
+- Next: Matching
+
+- Lecture 13 and 14: Natural experiments
+    - Regression-Discontinuity Designs
+    - Instrumental Variable Regression
+
+## Conclusion
+- Think of experiments as observational studies
+    - And think of observational studies as experiments
+
+----

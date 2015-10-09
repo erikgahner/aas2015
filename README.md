@@ -30,7 +30,7 @@ Gerber, A. S. & D. P. Green. 2012. _Field Experiments: Design, Analysis, and Int
 
 **Recommended readings:**
 
-Holland, P. W. 1986. Statistics and Causal Inference. _Journal of the American Statistical Association_ 81(396): 945-960.
+Holland, P. W. 1986. Statistics and Causal Inference. _Journal of the American Statistical Association_ 81(396): 945-960. ([gated](http://www.tandfonline.com/doi/abs/10.1080/01621459.1986.10478354), [ungated](http://www.ics.uci.edu/~sternh/courses/265/holland_jasa1986.pdf))
 
 Morgan, S. L. & C. Winship. 2007. _Counterfactuals and Causal Inference: Methods and Principles for Social Research_. New York: Cambridge University Press.
 
