@@ -12,7 +12,7 @@ The course is teached together with Sune Welling Hansen and Robert Klemmensen. T
 
 ## Slides
 
-- Lecture 10: Experiments and Causal Inference
+- Lecture 10: [Experiments and Causal Inference](http://erikgahner.github.io/slides/aas2015-w10-experiments/experiments.html)
 - Lecture 11: Matching and Propensity Scores
 - Lecture 12: Regression-Discontinuity Designs
 - Lecture 13: Instrumental Variable Regression
@@ -38,11 +38,11 @@ Morton, R. B. & K. C. Williams. 2010. _Experimental Political Science and the St
 
 Mutz, D. 2011. _Population-Based Survey Experiments_. New Jersey: Princeton University Press.
 
-Rubin, D. B. 2008. For Objective Causal Inference, Design Trumps Analysis. _The Annals of Applied Statistics_ 2(3): 808-840.
+Rubin, D. B. 2008. For Objective Causal Inference, Design Trumps Analysis. _The Annals of Applied Statistics_ 2(3): 808-840. ([gated](http://www.jstor.org/stable/30245110?seq=1#page_scan_tab_contents), [ungated](http://arxiv.org/pdf/0811.1640.pdf))
 
 **Recommended reading in Danish:**
 
-Blom-Hansen, J. & S. Serritzlew. 2014. Endogenitet og eksperimenter – forskningsdesignet som løsning. _politica_ 46(1):5-23.
+Blom-Hansen, J. & S. Serritzlew. 2014. Endogenitet og eksperimenter – forskningsdesignet som løsning. _politica_ 46(1):5-23. ([ungated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/blom-hansen_og_serritzlew.pdf))
 
 ### Lecture 11: Matching and Propensity Scores
 
