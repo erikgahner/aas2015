@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Experiments and Causal Inference</title>
+  <meta name="description" content="">
+  <meta name="author" content="Erik Gahner Larsen">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="./frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="./frameworks/revealjs/css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="./highlighters/highlight.js/css/solarized_dark.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  <h3>Experiments and Causal Inference</h3>
+  <h4>Advanced applied statistics, 2015</h4>
+
+<h5>Erik Gahner Larsen</h5>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h3>Experiments in political science research</h3>
+  <p><img src="assets/fig/unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  
+  <p>&quot;Like it or not, social scientists rely on the logic of experimentation even when analyzing nonexperimental data.&quot; (Green and Gerber <a href="http://ann.sagepub.com/content/589/1/94.abstract">2003</a>, 110)</p>
+
+<p>&quot;In some sense every empirical researcher is reporting the results of an experiment. Every researcher who behaves as if an exogenous variable varies independently of an error term effectively views their data as coming from an experiment.&quot; (Harrison and List <a href="http://www.jstor.org/stable/3594915">2004</a>, 1009)</p>
+
+</section>
+<section class='' data-state='' id='slide-4'>
+  
+  <p>&quot;[T]here is no reason to suppose that case study research follows a divergent logic of inquiry relative to experimental research.&quot; (Gerring and McDermott <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2007.00275.x/abstract">2007</a>, 689)</p>
+
+<p>&quot;If you can&#39;t devise an experiment that answers your question in a world where anything goes, then the odds of generating useful results with a modest budget and nonexperimental survey data seem pretty slim. The description of an ideal experiment also helps you formulate causal questions precisely.&quot; (Angrist and Pischke <a href="http://press.princeton.edu/titles/8769.html">2009</a>, 5)</p>
+
+</section>
+<section class='' data-state='' id='slide-5'>
+  <h2>Agenda</h2>
+  <ul>
+<li><p>Causal effects</p></li>
+<li><p>Experiments and assumptions</p></li>
+<li><p>Issues in experimental research</p></li>
+<li><p>Types of experiments</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-6'>
+  <h3>Example: The effect of facebook use on life satisfaction</h3>
+  <ul>
+<li><p>How would we test this in an observational setting? </p></li>
+<li><p>What is the problem?</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-7'>
+  <h3>What is it all about?</h3>
+  <ul>
+<li><p>We need strong designs in order to make causal inferences</p>
+
+<ul>
+<li>Remember: Science is all about causality</li>
+</ul></li>
+<li><p>The issue it not the data we have ... but the data we do <strong>not</strong> have.</p></li>
+<li><p>&quot;Easy&quot; to measure the factual world</p>
+
+<ul>
+<li>What about the counterfactual world?</li>
+</ul></li>
+<li><p>We need theoretical and statistical tools to make valid counterfactuals</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-8'>
+  
+  <ul>
+<li>From estimation strategies (<em>statistics</em>) to identification strategies (<em>design</em>):
+
+<ul>
+<li>&quot;Without an experiment, a natural experiment, a discontinuity, or some other strong design, no amount of econometric or statistical modeling can make the move from correlation to causation persuasive.&quot; (Sekhon <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev.polisci.11.060606.135444">2009</a>, 503)</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-9'>
+  <h3>Neyman-Rubin causal model</h3>
+  <ul>
+<li><p>We are interested in potential outcomes to define causal effects</p></li>
+<li><p>For individual <em>i</em>, we have a potential outcome: \(Y_{i}\)</p></li>
+<li><p>Treatment: \(W_{i}\)</p></li>
+<li><p>Potential outcome given treatment treatment status: \(Y_{i}(W_{i})\)</p></li>
+<li><p>Two potential outcomes: \(Y_{i}(1), Y_{i}(0)\)</p></li>
+<li><p>Unit causal effect: The difference between a unit&#39;s potential outcome under treatment and the unit&#39;s potential outcome under control.</p></li>
+</ul>
+
+<p>\(\tau_{i} = Y_{i}(1) - Y_{i}(0)\)</p>
+
+</section>
+<section class='' data-state='' id='slide-10'>
+  <h4>Example: facebook and life satisfaction</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em></th>
+<th align="center">\(Y_{i}(0)\) (no facebook)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">60</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">80</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">40</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">75</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">40</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">60</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">75</td>
+</tr>
+<tr>
+<td><strong>Average</strong> &nbsp;&nbsp;&nbsp;</td>
+<td align="center"><strong>50</strong></td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-11'>
+  <h4>Example: facebook and life satisfaction</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em></th>
+<th align="center">\(Y_{i}(0)\) (no facebook) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) (facebook)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">60</td>
+<td align="center">70</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">20</td>
+<td align="center">50</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">80</td>
+<td align="center">80</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">30</td>
+<td align="center">45</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">40</td>
+<td align="center">50</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">75</td>
+<td align="center">60</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">40</td>
+<td align="center">45</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">20</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">60</td>
+<td align="center">85</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">75</td>
+<td align="center">85</td>
+</tr>
+<tr>
+<td><strong>Average</strong> &nbsp;&nbsp;&nbsp;</td>
+<td align="center"><strong>50</strong></td>
+<td align="center"><strong>60</strong></td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-12'>
+  <h4>Example: facebook and life satisfaction</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em></th>
+<th align="center">\(Y_{i}(0)\) (no facebook) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) (facebook) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(\tau_{i}\)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">60</td>
+<td align="center">70</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">20</td>
+<td align="center">50</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">80</td>
+<td align="center">80</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">30</td>
+<td align="center">45</td>
+<td align="center">15</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">40</td>
+<td align="center">50</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">75</td>
+<td align="center">60</td>
+<td align="center">-15</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">40</td>
+<td align="center">45</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">20</td>
+<td align="center">30</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">60</td>
+<td align="center">85</td>
+<td align="center">25</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">75</td>
+<td align="center">85</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td><strong>Average</strong> &nbsp;&nbsp;&nbsp;</td>
+<td align="center"><strong>50</strong></td>
+<td align="center"><strong>60</strong></td>
+<td align="center"><strong>10</strong></td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-13'>
+  <h1>FPCI</h1>
+  
+</section>
+<section class='' data-state='' id='slide-14'>
+  <h3>The Fundamental Problem of Causal Inference (FPCI)</h3>
+  
+</section>
+<section class='' data-state='' id='slide-15'>
+  <h3>The Fundamental Problem of Causal Inference (FPCI)</h3>
+  <ul>
+<li><p>&quot;It is impossible to <em>observe</em> the value of \(Y_{i}(1)\) and \(Y_{i}(0)\) on the same unit and, therefore, it is impossible to <em>observe</em> the effect of \(W_{i}\) on \(i\).&quot; (Holland <a href="http://www.jstor.org/stable/2289064">1986</a>, 947)</p></li>
+<li><p>We observe <em>one</em> outcome: the realised outcome</p></li>
+</ul>
+
+<p>\(R_{i} = W_{i}Y_{i}(1) + (1-W_{i})Y_{i}(0)\)</p>
+
+</section>
+<section class='' data-state='' id='slide-16'>
+  <h4>Example: facebook and life satisfaction</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em></th>
+<th align="center">\(Y_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(W_{i}\)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">60</td>
+<td align="center">?</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">?</td>
+<td align="center">50</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">80</td>
+<td align="center">?</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">?</td>
+<td align="center">45</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">40</td>
+<td align="center">?</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">?</td>
+<td align="center">60</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">?</td>
+<td align="center">45</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">20</td>
+<td align="center">?</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">?</td>
+<td align="center">85</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">75</td>
+<td align="center">?</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-17'>
+  <h4>Example: facebook and life satisfaction</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em></th>
+<th align="center">\(Y_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(W_{i}\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(R_{i}\) (observed outcome)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">60</td>
+<td align="center">?</td>
+<td align="center">0</td>
+<td align="center">60</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">?</td>
+<td align="center">50</td>
+<td align="center">1</td>
+<td align="center">50</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">80</td>
+<td align="center">?</td>
+<td align="center">0</td>
+<td align="center">80</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">?</td>
+<td align="center">45</td>
+<td align="center">1</td>
+<td align="center">45</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">40</td>
+<td align="center">?</td>
+<td align="center">0</td>
+<td align="center">40</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">?</td>
+<td align="center">60</td>
+<td align="center">1</td>
+<td align="center">60</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">?</td>
+<td align="center">45</td>
+<td align="center">1</td>
+<td align="center">45</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">20</td>
+<td align="center">?</td>
+<td align="center">0</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">?</td>
+<td align="center">85</td>
+<td align="center">1</td>
+<td align="center">85</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">75</td>
+<td align="center">?</td>
+<td align="center">0</td>
+<td align="center">75</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-18'>
+  <h3>So, you cannot prove causality with statistics?</h3>
+  
+</section>
+<section class='' data-state='' id='slide-19'>
+  <h3>Well, you can only prove causality <em>with</em> statistics.</h3>
+  <p>(Rosenbaum <a href="http://www.springer.com/us/book/9781441912121">2010</a>, 35)</p>
+
+</section>
+<section class='' data-state='' id='slide-20'>
+  
+  <p>The FPCI is a missing data problem. What is the solution?</p>
+
+</section>
+<section class='' data-state='' id='slide-21'>
+  <h2>Random assignment</h2>
+  <p><img src="assets/fig/fig-randomselect.png" alt="Random selection"></p>
+
+</section>
+<section class='' data-state='' id='slide-22'>
+  <h3>Random assignment</h3>
+  <ul>
+<li><p>Create two groups of observations that are, in expectation, identical prior to application of the treatment (Green and Gerber <a href="http://books.wwnorton.com/books/webad.aspx?id=24003">2012</a>, 31)</p></li>
+<li><p>Create a counterfactual group.</p></li>
+<li><p>Guarantees that the treatment is prior to the outcome, avoiding posttreatment and simultaneity biases.</p></li>
+<li><p>\(P(W)\) = 0.5 (<em>coin flip</em>)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-23'>
+  <h3>Assumption I: Ignorability of Treatment Assignment</h3>
+  <ul>
+<li><p>Pretreatment covariates, \(X\)</p></li>
+<li><p>Unconfoundedness \((Y(1),Y(0),X) \perp W\)</p></li>
+<li><p>What about \((Y(1),Y(0)) \perp W|X\)?</p>
+
+<ul>
+<li>We will address this issue next week</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-24'>
+  <h3>Average treatment effect</h3>
+  <ul>
+<li><p>What most scholars are interested in</p></li>
+<li><p>Average treatment effect: \(\tau_{ATE} = E[Y(1) - Y(0)] = E[Y(1)] - E[Y(0)]\)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-25'>
+  <h3>Assumption II: Stable Unit Treatment Value Assumption (SUTVA)</h3>
+  <ul>
+<li><p>A collection of implied assumptions about the effect of treatments on individuals</p></li>
+<li><p>&quot;The potential outcomes for any unit do not vary with the treatments assigned to other units, and, for each unit, there are no different forms or versions of each treatment level, which lead to different potential outcomes.&quot; (Imbens and Rubin <a href="http://www.cambridge.org/it/academic/subjects/statistics-probability/statistical-theory-and-methods/causal-inference-statistics-social-and-biomedical-sciences-introduction">2015</a>, 10)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-26'>
+  <h3>Assumption II: Stable Unit Treatment Value Assumption (SUTVA)</h3>
+  <ol>
+<li>Noninterference: Potential outcomes for unit <em>i</em> depend only on the treatment assignment of unit <em>i</em> (no interference or spillover effect):</li>
+</ol>
+
+<p>\((Y(1),Y(0)) \perp W_{j}, \forall i \neq j\)</p>
+
+<ol>
+<li>Exclusion restriction: Only one version of each treatment possible for each unit</li>
+</ol>
+
+</section>
+<section class='' data-state='' id='slide-27'>
+  <h3>Assumption II: Stable Unit Treatment Value Assumption (SUTVA)</h3>
+  <p>Two implications (from Heckman <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.0081-1750.2006.00164.x/abstract">2005</a>, 11):</p>
+
+<ul>
+<li><p>Rules out social interactions and general equilibrium effects.</p></li>
+<li><p>Rules out any effect of the assignment mechanism on potential outcomes.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-28'>
+  <h3>Assumption III: Compliance</h3>
+  <ul>
+<li><p>\(W_{i}\) is <em>assignment</em> to treatment</p></li>
+<li><p>Subjects can - in many cases - decide not to comply</p></li>
+<li><p>\(D_{i}\): treatment status (1 if treated, 0 if not)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-29'>
+  <h3>Assumption III: Compliance, always-takers</h3>
+  <ul>
+<li><p>Always-takers will <em>always</em> be treated </p></li>
+<li><p>\(W_{i}\) = 1, \(D_{i}\) = 1</p></li>
+<li><p>\(W_{i}\) = 0, \(D_{i}\) = 1</p></li>
+<li><p>Facebook example: Will use facebook independent of treatment assignment</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-30'>
+  <h3>Assumption III: Compliance, never-takers</h3>
+  <ul>
+<li><p>Never-takers will <em>never</em> be treated </p></li>
+<li><p>\(W_{i}\) = 1, \(D_{i}\) = 0</p></li>
+<li><p>\(W_{i}\) = 0, \(D_{i}\) = 0</p></li>
+<li><p>Facebook example: Will not use facebook independent of treatment assignment</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-31'>
+  <h3>Assumption III: Compliance, cooperators</h3>
+  <ul>
+<li><p>Cooperators will... cooperate</p></li>
+<li><p>\(W_{i}\) = 1, \(D_{i}\) = 1</p></li>
+<li><p>\(W_{i}\) = 0, \(D_{i}\) = 0</p></li>
+<li><p>Facebook example: Will <em>only</em> use facebook if assigned to treatment</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-32'>
+  <h3>Assumption III: Compliance, defiers</h3>
+  <ul>
+<li><p>Defiers will... do the opposite</p></li>
+<li><p>\(W_{i}\) = 1, \(D_{i}\) = 0</p></li>
+<li><p>\(W_{i}\) = 0, \(D_{i}\) = 1</p></li>
+<li><p>Facebook example: Will use facebook if not assigned to treatment and not use facebook if assigned to treatment</p></li>
+<li><p>We assume that there are no defiers (monotonicity)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-33'>
+  <h3>So, which cases inform causal inference?</h3>
+  
+</section>
+<section class='' data-state='' id='slide-34'>
+  <h3>The cases whose treatment status can be changed (hint: cooperators)</h3>
+  
+</section>
+<section class='' data-state='' id='slide-35'>
+  <h4>Assumption III: Compliance</h4>
+  <p>How do we know that \(W_{i}\) = 1, \(D_{i}\) = 1 is a cooperator and not an always-taker? </p>
+
+<p>How do we know that \(W_{i}\) = 0, \(D_{i}\) = 0 is a cooperator and not a never-taker? </p>
+
+</section>
+<section class='' data-state='' id='slide-36'>
+  <h4>Assumption III: Compliance</h4>
+  <ul>
+<li><p>We only have realised outcomes (we need a counterfactual)</p></li>
+<li><p>Hard to say whether we are dealing with compliance or noncompliance</p></li>
+<li><p>Remember: Try to measure compliance!</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-37'>
+  <h3>Intention-to-treat</h3>
+  <ul>
+<li><p>Our effects are often intention-to-treat (ITT) estimates.</p></li>
+<li><p>Mean difference on Y between subjects assigned to treatment and subjects not assigned to treatment.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-38'>
+  <h4>Example: Noncompliance with Encouragement \(W_{i}\) to Exercise \(D_{i}\)</h4>
+  <ul>
+<li><p>From Table 5.5 in Rosenbaum (<a href="http://www.springer.com/us/book/9780387989679">2002</a>, 182).</p></li>
+<li><p>Y = forced expiratory volume (higher numbers signifying better lung function)</p></li>
+<li><p>Will subject exercice with encouragement? (\(d_{i}(1)\))</p></li>
+<li><p>Will subject exercice without encouragement? (\(d_{i}(0)\))</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-39'>
+  <h4>Example: Noncompliance with Encouragement \(W_{i}\) to Exercise \(D_{i}\)</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em> &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-40'>
+  
+  <p>What are the potential outcomes?</p>
+
+</section>
+<section class='' data-state='' id='slide-41'>
+  <h4>Example: Noncompliance with Encouragement \(W_{i}\) to Exercise \(D_{i}\)</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em> &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">71</td>
+<td align="center">71</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">68</td>
+<td align="center">68</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">64</td>
+<td align="center">59</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">62</td>
+<td align="center">57</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">59</td>
+<td align="center">54</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">58</td>
+<td align="center">53</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">56</td>
+<td align="center">51</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">56</td>
+<td align="center">51</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">42</td>
+<td align="center">42</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">39</td>
+<td align="center">39</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-42'>
+  
+  <p>Let&#39;s assign some treatments and see the realised outcomes.</p>
+
+</section>
+<section class='' data-state='' id='slide-43'>
+  <h4>Example: Noncompliance with Encouragement \(W_{i}\) to Exercise \(D_{i}\)</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em> &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(W_{i}\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(D_{i}\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(R_{i}\)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">71</td>
+<td align="center">71</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">71</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">68</td>
+<td align="center">68</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">68</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">64</td>
+<td align="center">59</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">64</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">62</td>
+<td align="center">57</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">57</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">59</td>
+<td align="center">54</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">54</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">57</td>
+<td align="center">52</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">57</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">56</td>
+<td align="center">51</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">56</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">56</td>
+<td align="center">51</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">51</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">42</td>
+<td align="center">42</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">42</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">39</td>
+<td align="center">39</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">39</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-44'>
+  <h2>Let&#39;s create a data frame</h2>
+  <pre><code class="r">di1 &lt;- c(1, 1, 1, 1, 1, 1, 1, 1, 0, 0)
+di0 &lt;- c(1, 1, 0, 0, 0, 0 ,0, 0, 0, 0)
+Yi1 &lt;- c(71, 68, 64, 62, 59, 57, 56, 56, 42, 39)
+Yi0 &lt;- c(71, 68, 59, 57, 54, 52, 51, 51, 42, 39)
+Wi &lt;- c(1, 0, 1, 0, 0, 1, 1, 0, 0, 1)
+Di &lt;- c(1, 1, 1, 0, 0, 1, 1, 0, 0, 0)
+Ri &lt;- c(71, 68, 64, 57, 54, 57, 56, 51, 42, 39)
+lung &lt;- data.frame(di1, di0, Yi1, Yi0, Wi, Di, Ri)
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-45'>
+  
+  <p>What is the (average) causal effect?</p>
+
+</section>
+<section class='' data-state='' id='slide-46'>
+  
+  <pre><code class="r">mean(
+  lung[lung$Wi == 1 &amp; lung$di1 - lung$di0 == 1,]$Ri - 
+  lung[lung$Wi == 0 &amp; lung$di1 - lung$di0 == 1,]$Ri
+  )
+</code></pre>
+
+<pre><code>## [1] 5
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-47'>
+  <h3>What is the naive average treatment effect?</h3>
+  
+</section>
+<section class='' data-state='' id='slide-48'>
+  
+  <pre><code class="r">mean(lung[lung$Di == 1,]$Ri - lung[lung$Di == 0,]$Ri)
+</code></pre>
+
+<pre><code>## [1] 14.6
+</code></pre>
+
+<pre><code class="r">summary(lm(Ri~Di, data=lung))
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = Ri ~ Di, data = lung)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -9.60  -6.50   1.60   5.25   8.40 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   48.600      3.225  15.070 3.72e-07 ***
+## Di            14.600      4.561   3.201   0.0126 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 7.211 on 8 degrees of freedom
+## Multiple R-squared:  0.5616, Adjusted R-squared:  0.5068 
+## F-statistic: 10.25 on 1 and 8 DF,  p-value: 0.01259
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-49'>
+  <h3>Problem</h3>
+  <p>ATE is confounded by endogenous selection into treatment</p>
+
+</section>
+<section class='' data-state='' id='slide-50'>
+  <h3>What is the ITT?</h3>
+  
+</section>
+<section class='' data-state='' id='slide-51'>
+  
+  <pre><code class="r">mean(lung[lung$Wi == 1,]$Ri - lung[lung$Wi == 0,]$Ri)
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<pre><code class="r">summary(lm(Ri~Wi, data=lung))
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = Ri ~ Wi, data = lung)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -18.4   -2.9   -0.4    5.6   13.6 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   54.400      4.812  11.304 3.38e-06 ***
+## Wi             3.000      6.806   0.441    0.671    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.76 on 8 degrees of freedom
+## Multiple R-squared:  0.02371,    Adjusted R-squared:  -0.09832 
+## F-statistic: 0.1943 on 1 and 8 DF,  p-value: 0.671
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-52'>
+  
+  <p>You might say: &quot;Seriously, I can think of a billion cases where all this might be problematic.&quot;</p>
+
+</section>
+<section class='' data-state='' id='slide-53'>
+  <h3><em>Welcome to the social sciences</em>.</h3>
+  
+</section>
+<section class='' data-state='' id='slide-54'>
+  <h2>Types of experiments</h2>
+  <ul>
+<li>Lab experiments</li>
+<li>Survey experiments</li>
+<li>Field experiments</li>
+<li>Natural experiments</li>
+<li>Quasi-experiments</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-55'>
+  <h3>Types of designs</h3>
+  <p>(from Blom-Hansen and Serritzlew <a href="http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/blom-hansen_og_serritzlew.pdf">2014</a>, 13)</p>
+
+<table><thead>
+<tr>
+<th>Experiment</th>
+<th>Comparison of experiment  and control group</th>
+<th>Exogenous or as-if  exogenous intervention</th>
+<th>Groupings are randomized  or as-if randomized</th>
+<th>Researcher manipulates  intervention</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Lab</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Survey</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Natural</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Quasi</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Observational</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-56'>
+  
+  <p>What type of experiment is the facebook and life satisfaction study? </p>
+
+</section>
+<section class='' data-state='' id='slide-57'>
+  <h3>Facebook and life satisfaction</h3>
+  <ul>
+<li><p>Lab: Get subjects into the lab, randomize, treatment group use facebook.</p></li>
+<li><p>Survey: Get subjects to answer a survey, randomize, treatment group see material from facebook.</p></li>
+<li><p>Field: Get subjects to sign up, randomize, treatment group use facebook.</p></li>
+<li><p>Natural/quasi: Utilize (as-if) random variation in the access to facebook.</p></li>
+<li><p>Observational: Ask people about facebook use and life satisfaction :-(</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-58'>
+  <h3>Example: Study design, facebook and life satisfaction</h3>
+  <p><img src="assets/fig/fig-fb-design.png" alt="Study design, facebook"></p>
+
+</section>
+<section class='' data-state='' id='slide-59'>
+  <h3>Example: Study effects, facebook and life satisfaction</h3>
+  <p><img src="assets/fig/fig-fb-effects.png" alt="Effects, facebook"></p>
+
+</section>
+<section class='' data-state='' id='slide-60'>
+  <h3>Example: Study effects, facebook and life satisfaction (0-9)</h3>
+  <p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"> </p>
+
+</section>
+<section class='' data-state='' id='slide-61'>
+  <h4>What if the randomization failed?</h4>
+  <p><img src="assets/fig/fig-randomgilbert.png" alt="Random numbers"></p>
+
+</section>
+<section class='' data-state='' id='slide-62'>
+  <h2>What about covariates?</h2>
+  <ul>
+<li><p>Always report the <em>unadjusted</em> treatment effect: &quot;If an estimated treatment effect is insignificant in the absence of controls, this should clearly shape our interpretation of the effect being estimated&quot; (Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>, 268)</p></li>
+<li><p>We use experiments so we don&#39;t have to care about covariates: &quot;Yet, the whole point of a natural experiment is that such concerns about confounding should be limited by the research design.&quot; (Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>, 118)</p></li>
+<li><p>Covariates reduce noise, increases the chance that we reach statistical significance (Mutz <a href="http://press.princeton.edu/titles/9620.html">2011</a>, 123f)</p></li>
+<li><p>Positive view: Variables measured before the variables of interest was determined are generally good controls (Angrist and Pischke <a href="http://press.princeton.edu/titles/8769.html">2009</a>, 64ff)</p></li>
+</ul>
+
+<hr>
+
+<h2>How to conduct an experiment</h2>
+
+<ul>
+<li><p>Remember theory.</p></li>
+<li><p>Consider -- from a practical perspective -- whether an experiment is feasible</p></li>
+<li><p>Specify hypothesis/hypotheses <em>prior</em> to the data collection</p>
+
+<ul>
+<li>Prespecification (if you plan to publish in academic journals: preregister)</li>
+<li><a href="https://xkcd.com/882/">What is your dependent variable?</a></li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-63'>
+  <h2>How to report an experiment</h2>
+  <ul>
+<li><p>We have specific guidelines for reporting experimental research in political science</p></li>
+<li><p>See Gerber et al. (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=9322216&amp;fileId=S2052263014000116">2014</a>): Reporting Guidelines for Experimental Research: A Report from the Experimental Research Section Standards Committee. <em>Journal of Experimental Political Science</em> 1(1): 81-98.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-64'>
+  <h2>What about external validity?</h2>
+  <ul>
+<li><p>External validity is all about your theory</p></li>
+<li><p>And remember: &quot;It makes no sense to say that some empirical research is low on internal validity but high on external validity.&quot; (Morton and Williams <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/experimental-political-science-and-study-causality-nature-lab">2010</a>, 275)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-65'>
+  <h3>Replication, reproduction and transparency</h3>
+  <ul>
+<li><p>One of the biggest issues with experiments (and all research) today: lack of replications</p></li>
+<li><p>Novelty bias (especially in political science!)</p></li>
+<li><p>We need more replications of existing experiments</p></li>
+<li><p>Sadly, only few examples of direct replications in political science</p></li>
+<li><p>&quot;Indeed, few experimental literatures have generated repicable interactions between two variables.&quot; (Green and Gerber <a href="http://books.wwnorton.com/books/webad.aspx?id=24003">2012</a>, 310)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-66'>
+  <h3>Replication, reproduction and transparency</h3>
+  <ul>
+<li><p>Make sure that your research is reproducible (STATA do-file and/or R scripts)</p></li>
+<li><p>Share your data</p></li>
+<li><p>Reproduce and replicate existing studies (great way to &quot;learn science&quot;)</p></li>
+<li><p>Be transparent (what did you do, how did you do it etc.)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-67'>
+  <h2>Observational research</h2>
+  <ul>
+<li>Cochran&#39;s Basic Advice: &quot;The planner of an observational study should always ask himself the question, &#39;How would the study be conducted if it were possible to do it by controlled experimentation?&#39;&quot; (from Rosenbaum <a href="http://www.springer.com/us/book/9781441912121">2010</a>, 16)</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-68'>
+  <h3>Conclusion: Words to live by</h3>
+  <ul>
+<li>Think of experiments as observational studies</li>
+<li>Think of observational studies as experiments</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-69'>
+  <h2>Install R and RStudio</h2>
+  <p>R: <a href="https://cran.rstudio.com/">cran.rstudio.com</a></p>
+
+<p>RStudio: <a href="https://www.rstudio.com/products/rstudio/download/">rstudio.com/products/rstudio/download/</a></p>
+
+</section>
+<section class='' data-state='' id='slide-70'>
+  <h2>Schedule</h2>
+  <ul>
+<li><p>Today: Experiments</p></li>
+<li><p>Next: Matching</p></li>
+<li><p>Lecture 13 and 14: Natural experiments</p>
+
+<ul>
+<li>Regression-Discontinuity Designs</li>
+<li>Instrumental Variable Regression</li>
+</ul></li>
+<li><p>Lab session 6 and 7: R and matching</p></li>
+</ul>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="./frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="./frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'simple', 
+    transition: Reveal.getQueryHash().transition || 'fade', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: './frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: './frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: './frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: './frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="./widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="./highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>
