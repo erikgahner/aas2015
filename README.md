@@ -50,23 +50,23 @@ Blom-Hansen, J. & S. Serritzlew. 2014. Endogenitet og eksperimenter – forsknin
 
 Gelman, A. & J. Hill. 2007. _Data Analysis Using Regression and Multilevel/Hierarchical Models_. New York: Cambridge University Press. (Chapter 10.1, 10.2 and 10.3) (5 pages)
 
-Kam, C. D. & C. L. Palmer. 2008. Reconsidering the Effects of Education on Political Participation. _Journal of Politics_ 70(3): 612-631. (19 pages)
+Kam, C. D. & C. L. Palmer. 2008. Reconsidering the Effects of Education on Political Participation. _Journal of Politics_ 70(3): 612-631. (19 pages) ([gated](http://journals.cambridge.org/action/displayFulltext?type=1&fid=1927228&jid=JOP&volumeId=70&issueId=03&aid=1927220), ungated)
 
-Sekhon, J. S. 2009. Opiates for the Matches: Matching Methods for Causal Inference. _Annual Review of Political Science_ 12: 487-508. (21 pages)
+Sekhon, J. S. 2009. Opiates for the Matches: Matching Methods for Causal Inference. _Annual Review of Political Science_ 12: 487-508. (21 pages) ([gated](http://www.annualreviews.org/doi/abs/10.1146/annurev.polisci.11.060606.135444), [ungated](http://sekhon.berkeley.edu/papers/opiates.pdf))
 
 **Recommended readings:**
 
-Henderson, J. & S. Chatfield. 2011. Who Matches? Propensity Scores and Bias in the Causal Effects of Education on Participation. _Journal of Politics_ 73(3): 646-658.
+Henderson, J. & S. Chatfield. 2011. Who Matches? Propensity Scores and Bias in the Causal Effects of Education on Participation. _Journal of Politics_ 73(3): 646-658. ([gated](http://journals.cambridge.org/action/displayAbstract?fromPage=online&aid=8347737&fileId=S0022381611000351), ungated)
 
-Mayer, A. K. 2011. Does Education Increase Political Participation? _Journal of Politics_ 73(3): 633-645.
+Mayer, A. K. 2011. Does Education Increase Political Participation? _Journal of Politics_ 73(3): 633-645. ([gated](http://journals.cambridge.org/action/displayAbstract?fromPage=online&aid=8347734&fileId=S002238161100034X), ungated)
 
-Ho, D. E., K. Imai, G. King & E. A. Stuart. 2007. Matching as Nonparametric Preprocessing for Reducing Model Dependence in Parametric Causal Inference. _Political Analysis_ 15(3): 199-236.
+Ho, D. E., K. Imai, G. King & E. A. Stuart. 2007. Matching as Nonparametric Preprocessing for Reducing Model Dependence in Parametric Causal Inference. _Political Analysis_ 15(3): 199-236. ([gated](http://pan.oxfordjournals.org/content/15/3/199.short), [ungated](http://zmjones.com/static/causal-inference/ho-pa-2007.pdf))
 
 Guo, S. & M. W. Fraser. 2010. _Propensity Score Analysis: Statistical Methods and Applications_. Thousand Oaks: SAGE Publications.
 
 **Recommended reading in Danish:**
 
-Justesen, M. K. & R. Klemmensen. 2014. Sammenligning af sammenlignelige observationer: kausalitet, matching og observationsdata. _politica_ 46(1): 60-78.
+Justesen, M. K. & R. Klemmensen. 2014. Sammenligning af sammenlignelige observationer: kausalitet, matching og observationsdata. _politica_ 46(1): 60-78. ([ungated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/justesen_og_klemmensen.pdf))
  
 ### Lecture 12: Regression-Discontinuity Designs
 
@@ -78,15 +78,15 @@ Dunning, T. 2012. _Natural Experiments in the Social Sciences: A Design-Based Ap
 
 **Recommended readings:**
 
-Imbens, G. W. & T. Lemieux. 2008. Regression discontinuity designs: A guide to practice. _Journal of Econometrics_ 142(2): 615-635.
+Imbens, G. W. & T. Lemieux. 2008. Regression discontinuity designs: A guide to practice. _Journal of Econometrics_ 142(2): 615-635. ([gated](http://www.sciencedirect.com/science/article/pii/S0304407607001091), [ungated](http://info.cba.ksu.edu/Chua/Temp/RDD/ImbensLemieuxJE08.pdf))
 
-Lee, D. S. & T. Lemieux. 2010. Regression Discontinuity Designs in Economics. _Journal of Economic Literature_ 48(2): 281-355. 
+Lee, D. S. & T. Lemieux. 2010. Regression Discontinuity Designs in Economics. _Journal of Economic Literature_ 48(2): 281-355. ([gated](https://www.aeaweb.org/articles.php?doi=10.1257/jel.48.2.281), [ungated](http://www.princeton.edu/~davidlee/wp/RDDEconomics.pdf))
 
 Shadish, W. R., T. D. Cook & D. T. Campbell. 2002. _Experimental and Quasi-Experimental Designs for Generalized Causal Inference_. Belmont, CA: Wadsworth Cengage learning. (Chapter 7)
 
 **Recommended reading in Danish:**
 
-Olsen, A. L. 2014. Tærskelvariable og tærskelværdier: en introduktion til regressions-diskontinuitetsdesignet. _politica_ 46(1): 42-59.
+Olsen, A. L. 2014. Tærskelvariable og tærskelværdier: en introduktion til regressions-diskontinuitetsdesignet. _politica_ 46(1): 42-59. ([gated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/olsen.pdf))
  
 ### Lecture 13: Instrumental Variable Regression
 
@@ -96,20 +96,20 @@ Gelman, A. & J. Hill. 2007. _Data Analysis Using Regression and Multilevel/Hiera
 
 Dunning, T. 2012. _Natural Experiments in the Social Sciences: A Design-Based Approach_. New York: Cambridge University Press. (Chapter 4) (compendium, 15 pages)
 
-Sovey, A. J. & D. P. Green. 2011. Instrumental Variables Estimation in Political Science: A Readers’ Guide. _American Journal of Political Science_ 55(1): 188-200. (13 pages)
+Sovey, A. J. & D. P. Green. 2011. Instrumental Variables Estimation in Political Science: A Readers’ Guide. _American Journal of Political Science_ 55(1): 188-200. (13 pages) ([gated](http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2010.00477.x/abstract), [ungated](http://faculty.smu.edu/millimet/classes/eco6374/papers/sovey%20green%202011.pdf))
 
 **Recommended readings:**
 
 Angrist, J. D. & Pischke, J. 2009. _Mostly Harmless Econometrics: An Empiricist’s Companion_. New Jersey: Princeton University Press.
 
-Bollen, K. A. 2012. Instrumental Variables in Sociology and the Social Sciences. _Annual Review of Sociology_ 38: 37-72. 
+Bollen, K. A. 2012. Instrumental Variables in Sociology and the Social Sciences. _Annual Review of Sociology_ 38: 37-72. ([gated](http://www.annualreviews.org/doi/abs/10.1146/annurev-soc-081309-150141), ungated)
 
 Dunning, T. 2012. _Natural Experiments in the Social Sciences: A Design-Based Approach_. New York: Cambridge University Press.
 
-Dunning, T. 2008. Model Specification in Instrumental-Variables Regression. _Political Analysis_ 16(3):290-302.
+Dunning, T. 2008. Model Specification in Instrumental-Variables Regression. _Political Analysis_ 16(3):290-302. ([gated](http://pan.oxfordjournals.org/content/16/3/290.short), [ungated](http://zmjones.com/static/causal-inference/dunning-pa-2008.pdf))
 
-Angrist, J. D. & A. B. Krueger. 2001. Instrumental Variables and the Search for Identification: From Supply and Demand to Natural Experiments. _Journal of Economic Perspectives_ 15(4): 69-85.
+Angrist, J. D. & A. B. Krueger. 2001. Instrumental Variables and the Search for Identification: From Supply and Demand to Natural Experiments. _Journal of Economic Perspectives_ 15(4): 69-85. ([gated](https://www.aeaweb.org/articles.php?doi=10.1257/jep.15.4.69), [ungated](http://economics.mit.edu/files/18))
 
 **Recommended reading in Danish:**
 
-Hariri, J. G. 2014. Statskundskabens sammenfiltrede virkelighed og et bud på en løsning: IV-estimation. _politica_ 46(1): 79-94.
+Hariri, J. G. 2014. Statskundskabens sammenfiltrede virkelighed og et bud på en løsning: IV-estimation. _politica_ 46(1): 79-94. ([ungated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/hariri.pdf))
