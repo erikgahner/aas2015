@@ -15,7 +15,7 @@ sqrt(81)
 ## The arrow is identical to using "=", but please stick to "<-"
 x <- 2  ## You can also type 2 -> x
 
-# Logical operations
+# Logical operations (you get TRUE or FALSE)
 x == 2
 x == 3
 x != 2
@@ -24,25 +24,26 @@ x > 1
 x <= 2
 x >= 2.01
 
-# What class is x?
+# What class is x? (There are different object classes in R)
 class(x)
 
 # By the way, R is case sensitive
 class(X)  # x != X
 Class(X)  # Class() != class()
 
-# We can use our object for whatever we feel like
+# We can use our object for whatever we feel for
 x
 x + 2
 
 x*x*x
 
-y <- x + 2    # We can create a new object 
+y <- x + 2    # We can create a new object with our object
 y
 
 # List numbers 1 to 10
 1:10
 
+# What do you think this will do?
 1:10 + 2
 
 # We can also combine numbers into vectors and lists

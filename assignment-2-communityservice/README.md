@@ -1,0 +1,17 @@
+# Assignment 2: The effects of community service
+
+Look at the article "[Comparing the effects of community service and imprisonment on reconviction: results from a quasi-experimental Danish study](http://link.springer.com/article/10.1007/s11292-015-9231-1)" published in _Journal of Experimental Criminology_ (behind a paywall so access through the library). Focus in particular on the Methodology section as well as the matching procedure. 
+
+Consider the following questions before class:
+
+1) What does the paper find?
+
+2) Is the study an experiment? Why (not)?
+
+3) Is it reasonable that ITT = ATE? 
+
+4) Why does the paper use propensity score matching?
+
+5) Is the matching procedure successful? 
+
+6) Should the outcome of the matching procedure shape our interpretation of the estimated results? 

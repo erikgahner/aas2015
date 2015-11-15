@@ -1,0 +1,32 @@
+---
+title: "Lab 6: Intro to R"
+date: "Advanced Applied Statistics"
+output: pdf_document
+---
+
+## Description
+
+In this lab session we will focus on learning R. R is open source (contrary to STATA, SPSS, SAS etc.) and provide a lot of useful tools not available in STATA. We will use the lab session to work through the most basic stuff in R and replicate our findings from lab session 1 in R. 
+
+## I. Install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+Make sure that R and RStudio is working _prior_ to the lab session. Please do not hesitate to send me a mail prior to the lab session if you have any problems with installing and running RStudio.
+
+- [Download and Install R](https://cran.r-project.org/)
+
+- [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+- Guide: [Download and Install RStudio](http://rprogramming.net/download-and-install-rstudio/)
+
+## II. Basic R
+
+Go through `lab6.r`. Read the comments, run the script, make changes. In other words: Make it your own. Have fun. _Enjoy life_.
+
+## III. OLS regression and interaction analysis, redux
+
+1. Download the R material for lab session 1.
+
+2. Read/load the EES data file.
+
+3. Use the script to replicate the findings we got using STATA. 
+
