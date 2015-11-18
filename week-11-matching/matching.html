@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Matching and Propensity Scores</title>
+  <meta name="description" content="">
+  <meta name="author" content="Erik Gahner Larsen">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="./frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="./frameworks/revealjs/css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="./highlighters/highlight.js/css/solarized_dark.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  <h3>Matching and Propensity Scores</h3>
+  <h4>Advanced applied statistics, 2015</h4>
+
+<h5>Erik Gahner Larsen</h5>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h3>Feedback: Hierarchical models</h3>
+  <ul>
+<li><p>Substantially different assignments </p>
+
+<ul>
+<li>See individual feedback</li>
+</ul></li>
+<li><p>Make sure that you actually have multiple levels!</p></li>
+<li><p>Use <code>xtreg</code> or <code>mixed</code> </p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  <h3>Last week</h3>
+  <ul>
+<li><p>Neyman-Rubin causal model</p></li>
+<li><p>FPCI</p></li>
+<li><p>Random treatment assignment</p></li>
+<li><p>SUTVA, ATE, ITT, (non)compliance</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-4'>
+  <h3>Today: What and how</h3>
+  <ul>
+<li><p>What? Reduce bias caused by nonrandom treatment assignment.</p></li>
+<li><p>How? Preprocess data <em>prior</em> to running an estimator.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-5'>
+  <h3>Agenda</h3>
+  <ul>
+<li><p>Estimate causal effect of treatment assignment</p></li>
+<li><p>Causal inference in observational research</p></li>
+<li><p>Matching</p></li>
+<li><p>Course evaluation</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-6'>
+  <h1>Matching</h1>
+  
+</section>
+<section class='' data-state='' id='slide-7'>
+  <h3>Before we get too optimistic</h3>
+  <ul>
+<li><p>&quot;Matching has no advantage relative to regression for inferring causation or dealing with endogeneity&quot; (Miller <a href="https://sites.google.com/site/mkmtwo/Miller-Matching.pdf?attredirects=0">2015</a>, 2)</p></li>
+<li><p>We still need research designs with strong identification </p>
+
+<ul>
+<li>No identification == shit</li>
+</ul></li>
+<li><p>Remember: &quot;Without an experiment, a natural experiment, a discontinuity, or some other strong design, no amount of econometric or statistical modeling can make the move from correlation to causation persuasive.&quot; (Sekhon <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev.polisci.11.060606.135444">2009</a>, 503)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-8'>
+  <h3>Experiments and observational research</h3>
+  <p>&quot;A study without a treatment is neither an experiment nor an observational study.&quot; (Rosenbaum <a href="http://www.springer.com/us/book/9780387989679">2002</a>, 1)</p>
+
+</section>
+<section class='' data-state='' id='slide-9'>
+  <h2>What do we really want to do with our treatment?</h2>
+  
+</section>
+<section class='' data-state='' id='slide-10'>
+  
+  <p><img src="assets/fig/fig-randomisation.jpg" alt="Randomisation"></p>
+
+</section>
+<section class='' data-state='' id='slide-11'>
+  <h3>Experiments and causal inference</h3>
+  <ul>
+<li><p>We have two <em>comparable</em> groups: Treatment and control</p></li>
+<li><p>Covariates are independent of treatment assignment</p></li>
+<li><p>The propensity to be assigned to treatment is known (randomization, remember?)</p></li>
+<li><p>\(P(W_{i})\) = 0.5, for all \(i\)</p></li>
+<li><p>Unconfoundedness \((Y(1),Y(0),X) \perp W\)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-12'>
+  <h3>Causal inference and observational research</h3>
+  <ul>
+<li><p>From experiments to observational research designs</p>
+
+<ul>
+<li>Make observational studies build on the logic of randomized studies</li>
+</ul></li>
+<li><p>In randomized trials, ATE is of crucial interest</p></li>
+<li><p>In many observational studies, we are interested in ATT (average treatment effect on the treated):</p></li>
+</ul>
+
+<p>\(ATT = E[Y(1) - Y(0) | W = 1]\)</p>
+
+<ul>
+<li><p>Why? To evaluate the effect on units for whom the treatment is intended.</p></li>
+<li><p>Counterfactual mean: \(E[Y(0) | W = 1]\)</p>
+
+<ul>
+<li>Not observed. Why not use \(E[Y(0) | W = 0]\)?</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-13'>
+  <h3>Causal inference and observational research</h3>
+  <ul>
+<li><p>In observational studies the assignment probability is typically unknown</p></li>
+<li><p>Nonrandom treatment assignment</p></li>
+<li><p>When covariates, \(X\), matter for the treatment assignment: Matching </p>
+
+<ul>
+<li>&quot;Matching refers to a variety of procedures that restrict and reorganize the original sample in preparation for a statistical analysis.&quot; (Gelman and Hill <a href="http://www.cambridge.org/us/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models">2007</a>, 206)</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-14'>
+  <h3>Matching: What we want</h3>
+  <ul>
+<li><p>We want to maximize balance. Why?</p></li>
+<li><p>Use matching to balance covariate distributions</p></li>
+<li><p>Make the treated and control units look similar <em>prior</em> to treatment assignment</p></li>
+<li><p>Matching only adjust for <em>observed</em> covariates. A solution to OVB?</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-15'>
+  <h3>Matching units</h3>
+  <ul>
+<li><p>Matching follows a most similar design logic. We want to compare comparable cases.</p></li>
+<li><p>If you are the treated unit, we want control units similar to you.</p>
+
+<ul>
+<li>Only difference should be treatment assignment.</li>
+</ul></li>
+<li><p>We need a distance metrics (\(D_{ij}\)) to measure the distance between two units in terms of \(X\).</p>
+
+<ul>
+<li>We want less distance (<em>ceteris paribus</em>)</li>
+</ul></li>
+<li><p>Decision to make (and we have to make several decisions): Distance metric.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-16'>
+  <h3>Exact matching (stratified matching)</h3>
+  <ul>
+<li>Most straightforward and nonparametric way: match <em>exactly</em> on the covariate values.</li>
+</ul>
+
+<p>\(D_{ij} = \begin{cases} 0  & if X_{i} = X_{j} \\ \infty & if X_{i} \not = X_{j} \end{cases}\)</p>
+
+<ul>
+<li><p>No distance between matches. Infinite distance between observations without matches. </p></li>
+<li><p>Issue: Curse of dimensionality (Sekhon <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev.polisci.11.060606.135444">2009</a>, 497)</p></li>
+<li><p>Requirements:</p>
+
+<ul>
+<li>Discrete covariates</li>
+<li>Limited number of covariates</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-17'>
+  <h3>Common distance approaches</h3>
+  <ul>
+<li><p>There are multiple different approaches to measure distances</p></li>
+<li><p>We focus on two (Sekhon <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev.polisci.11.060606.135444">2009</a>):</p>
+
+<ul>
+<li>Multivariate matching based on Mahalanobis distance</li>
+<li>Propensity score matching</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-18'>
+  <h3>Mahalanobis distance</h3>
+  <ul>
+<li><p>Find control units in a multidimensional space</p></li>
+<li><p>CrossValidated: <a href="http://stats.stackexchange.com/a/62147">Explanation of the Mahalanobis distance</a></p></li>
+<li><p>Considers the distribution and covariance of the data</p></li>
+</ul>
+
+<p>\(D_{ij} = \sqrt{(X_{i} - X_{j})'S^{-1} (X_{i} - X_{j})}\)</p>
+
+<ul>
+<li>For ATT, we use the sample covariance matrix (\(S\)) of the treated data</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-19'>
+  <h3>Propensity score</h3>
+  <ul>
+<li><p>Propensity score: &quot;the propensity towards exposure to treatment 1 given the observed covariates x&quot; (Rosenbaum and Rubin <a href="http://biomet.oxfordjournals.org/content/70/1/41">1983</a>, 43)</p></li>
+<li><p>Propensity score (assignment probability): \(p_{i} \equiv Pr(W_{i} | X_{i})\)</p></li>
+<li><p>Probability of receiving treatment given the vector of covariates</p></li>
+<li><p>Distance: \(D_{ij} = | p_{i} - p_{j} |\)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-20'>
+  <h3>Regular design features</h3>
+  <ul>
+<li><p>Assumption 1: \(Pr[W | X, Y(1), Y(0)] = Pr(W | X)\) (Unconfoundedness)</p></li>
+<li><p>Different people have different propensity scores (Rubin <a href="http://jeb.sagepub.com/content/29/3/343.abstract">2004</a>). Examples: </p>
+
+<ul>
+<li>older males have probability 0.8 of being assigned the new treatment</li>
+<li>younger males 0.6</li>
+<li>older females 0.5</li>
+<li>younger females 0.2</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-21'>
+  <h3>Regular design features</h3>
+  <ul>
+<li><p>Assumption 2: \(0 < p_{i} < 1\) (Strictly between 0 and 1, i.e. overlap)</p></li>
+<li><p>Ignorability (Assumption 1). Strong Ignorability (Assumption 1 + 2) (Rosenbaum and Rubin <a href="http://biomet.oxfordjournals.org/content/70/1/41">1983</a>)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-22'>
+  <h3>Propensity score in practise</h3>
+  <ul>
+<li><p>A propensity score for each unit (i.e., an extra column in our data set)</p></li>
+<li><p>The propensity score can be the predicted probability from a logistic regresion</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-23'>
+  <h3>Overlap: Treatment effects on different people</h3>
+  <ul>
+<li><p>Matching: We want to have similar people for whom we can make inferences</p></li>
+<li><p>People should be as identical as possible with the exception of treatment assignment</p></li>
+<li><p>Consider two covariates: Age and income</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-24'>
+  <h3>Treatment effects on different people</h3>
+  <p><img src="assets/fig/unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+</section>
+<section class='' data-state='' id='slide-25'>
+  <h3>Treatment effects on different people</h3>
+  <p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+</section>
+<section class='' data-state='' id='slide-26'>
+  <h3>Treatment effects on different people</h3>
+  <p><img src="assets/fig/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+</section>
+<section class='' data-state='' id='slide-27'>
+  <h3>What is a reasonable match?</h3>
+  <ul>
+<li><p>There are units with no counterfactual(s) in the control group.</p></li>
+<li><p>How close should two units be?</p></li>
+<li><p>It can make sense to drop units with bad matches. How? </p>
+
+<ul>
+<li>Set a caliper and drop matches where distance is greater than the caliper</li>
+<li>Implication: Parameter of interest is the treatment effect for treated units with reasonable controls.</li>
+</ul></li>
+<li><p>So we kick out observations? Yep, ignore or downplay bad people. We want good people.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-28'>
+  <h3>Overlap</h3>
+  <ul>
+<li><p>Overlap (common support)</p></li>
+<li><p>What if \(p_{i} = 1\) or \(p_{i} = 0\)?</p></li>
+<li><p>Deterministic treatment assignment: not possible to estimate treatment effect</p></li>
+<li><p>Exclude cases with \(p_{i}\) close to 0 or 1 (rule of thumb:\(p_{i} < 0.1\) and \(p_{i} > 0.9\)) </p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-29'>
+  <h3>What about lack of overlap in OLS?</h3>
+  <ul>
+<li>How does OLS react to a lack of overlap? </li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-30'>
+  <h1>OLS is a beast</h1>
+  
+</section>
+<section class='' data-state='' id='slide-31'>
+  <h3>What about ties?</h3>
+  <ul>
+<li><p>There may be cases where multiple controls have the same distance to the treated unit</p></li>
+<li><p>Two possibilities:</p>
+
+<ol>
+<li>Coin flip (randomize)</li>
+<li>Weight (match all control units with the shortest distance)</li>
+</ol></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-32'>
+  <h3>Pre-treatment covariates</h3>
+  <ul>
+<li><p>Choose a set of covariates that you want to match on</p></li>
+<li><p>Important: </p>
+
+<ul>
+<li>Pre-treatment</li>
+<li>Satisfy ignorability</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-33'>
+  <h3>Matching methods: How to match units</h3>
+  <ul>
+<li><p>Nearest neighbor matching (with or without caliper)</p></li>
+<li><p>Radius matching</p></li>
+<li><p>Genetic matching</p></li>
+<li><p>Coarsened exact matching</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-34'>
+  <h3>Nearest neighbor</h3>
+  <ul>
+<li><p>The nearest neighbor. Choose the closest control unit to each treated uit.</p></li>
+<li><p>Trade-off: Bias and variance</p></li>
+<li><p>Number of matches</p>
+
+<ul>
+<li>Matching one NN: Less bias, more variance</li>
+<li>Mathing 1:n NN: Less variance, more bias</li>
+</ul></li>
+<li><p>Replacement</p>
+
+<ul>
+<li>With replacement: Low bias, more variance</li>
+<li>Without replacement: Low variance, potential bias</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-35'>
+  <h3>Replacement or not</h3>
+  <ul>
+<li><p>Should we match with replacement or without replacement?</p></li>
+<li><p>Match with replacement: Every treated unit can be matched to the same control unit</p>
+
+<ul>
+<li>Reduce bias but might increase variance of estimator if only few control units are matched</li>
+</ul></li>
+<li><p>Match without replacement: Each control unit can be matched one time (at most)</p></li>
+<li><p>Rule of thumb: Match with replacement</p>
+
+<ul>
+<li>Why? To make sure we get the best match</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-36'>
+  <h3>Radius matching</h3>
+  <ul>
+<li>Predefined neighborhood, bandwidth. Match unit \(i\) to units within \(r\):</li>
+</ul>
+
+<p>\(||p_{i} - p_{j}|| < r\)</p>
+
+<ul>
+<li>What kind of trade-off do we face when we have to settle on a radius?</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-37'>
+  <h3>Genetic matching</h3>
+  <ul>
+<li><p>An &quot;evolutionary search algorithm to determine the weight each covariate is given&quot; (Diamond and Sekhon <a href="http://www.mitpressjournals.org/doi/abs/10.1162/REST_a_00318">2013</a>)</p></li>
+<li><p>Matching solution that minimizes the maximum observed discrepancy between the distribution of matched treated and control covariates.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-38'>
+  <h3>Coarsened exact matching</h3>
+  <ul>
+<li><p>&quot;The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value [...] Then, the &#39;&#39;exact matching&#39;&#39; algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained.&quot; (Iacus et al. <a href="http://pan.oxfordjournals.org/content/20/1/1">2012</a>, 8)</p></li>
+<li><p>Automatically coarsen/stratify the data. Choose cutpoints for each variable in \(X\) and classify each value into one of multiple ranges.</p></li>
+<li><p>Matches the treated and control units within same range</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-39'>
+  <h3>Overlap</h3>
+  <ul>
+<li><p>Check the overlap for your matched data</p></li>
+<li><p>Identical groups </p></li>
+<li><p>No observable differences</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-40'>
+  <h3>Balance</h3>
+  <ul>
+<li><p>Check the balance</p>
+
+<ul>
+<li>Mean/proportion differences (t-test, Fisher exact test)</li>
+<li>Distribution (QQ plot, Kolmogorov-Smirnov test)</li>
+</ul></li>
+<li><p>Identical groups </p></li>
+<li><p>No observable differences</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-41'>
+  <h3>Did we succeed?</h3>
+  <ul>
+<li><p>In the best of all worlds: Overlap and balance</p></li>
+<li><p>If not, go back and repeat until we have the greatest amount of balance (e.g. add pre-treatment covariates)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-42'>
+  <h3>When we have balance</h3>
+  <ul>
+<li>Estimate ATT (or other parameter(s) of interest)</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-43'>
+  <h3>What is the causal effect of education on political participation?</h3>
+  <ul>
+<li><p>What is the argument made by Kam and Palmer (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=1927220">2008</a>)?</p></li>
+<li><p>Do they find empirical support for the argument?</p></li>
+<li><p>Discuss with your partner.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-44'>
+  <h3>What is the causal effect of education on political participation?</h3>
+  <ul>
+<li><p>Kam and Palmer (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=1927220">2008</a>): A classic nonrandom assignment problem.</p></li>
+<li><p>The logic: &quot;matches respondents who attended college with those who did not by using a propensity score, or predicted likelihood of attending college based upon an individual&#39;s preadult experiences and characteristics. The matching process mimics random assignment, thus producing two groups whose levels of participation can then be compared, having essentially controlled for preadult experiences and characteristics.&quot; (p. 613)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-45'>
+  
+  <p>&quot;Each respondent who received the treatment (i.e., a respondent who went to college, in our research question) is matched with a set of untreated respondents (i.e., respondents who did not attend college) that have similar propensity scores. This technique is called nearest-neighbor matching.&quot; (Kam and Palmer <a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=1927220">2008</a>, 620)</p>
+
+</section>
+<section class='' data-state='' id='slide-46'>
+  <h4>Propensity scores, before matching</h4>
+  <p><img src="assets/fig/fig-edu-pre.png" alt="Before matching"></p>
+
+</section>
+<section class='' data-state='' id='slide-47'>
+  <h4>Propensity scores, after matching</h4>
+  <p><img src="assets/fig/fig-edu-post.png" alt="After matching"></p>
+
+</section>
+<section class='' data-state='' id='slide-48'>
+  
+  <p>While there clearly is a better overlap now, what might be the biggest issue?</p>
+
+</section>
+<section class='' data-state='' id='slide-49'>
+  
+  <ul>
+<li><p>Propensity scores close to 1</p></li>
+<li><p>Henderson and Chatfield (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=8347737&amp;fileId=S0022381611000351">2011</a>, 652): &quot;we observe that clustering around 1 is so pronounced that the p-scores for the top 5% of college-attenders range in value from .9998174 to .9999998. In fact, over half of all attenders have propensity scores greater than .9 and over a quarter have scores greater than .99. In contrast, only 14 nonattenders have propensities greater than .9 (3%) and only 5 (1%) have propensities greater than .95, with the highest propensity for any nonattender being .9889.&quot;</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-50'>
+  <h3>So, what is the causal effect of education on political participation?</h3>
+  <ul>
+<li><p>Kam and Palmer (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=1927220">2008</a>): No effect.</p></li>
+<li><p>Mayer (<a href="http://journals.cambridge.org/action/displayFulltext?type=1&amp;fid=8347736&amp;jid=JOP&amp;volumeId=73&amp;issueId=03&amp;aid=8347734">2011</a>): Education increases political participation.</p></li>
+<li><p>Henderson and Chatfield (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=8347737&amp;fileId=S0022381611000351">2011</a>): Education increases political participation.</p></li>
+<li><p>Kam and Palmer (<a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=8347740&amp;fileId=S0022381611000363">2011</a>): No causal effect.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-51'>
+  <h3>Example: Community service and reconviction</h3>
+  <p>1) What does the paper find?</p>
+
+<p>2) Is the study an experiment? Why (not)?</p>
+
+<p>3) Is it reasonable that ITT = ATE?</p>
+
+<p>4) Why does the paper use propensity score matching?</p>
+
+<p>5) Is the matching procedure successful?</p>
+
+<p>6) Should the outcome of the matching procedure shape our interpretation of the estimated results?</p>
+
+</section>
+<section class='' data-state='' id='slide-52'>
+  <h3>Example: Community service and reconviction</h3>
+  <ul>
+<li><p>Effect of community service on reconviction (Klement <a href="http://link.springer.com/article/10.1007/s11292-015-9231-1">2015</a>)</p></li>
+<li><p>Dependent variable: Reconviction rate</p></li>
+<li><p>Treatment: Community service (CS) (control: imprisonment)</p></li>
+<li><p>Design: Quasi-experiment</p></li>
+<li><p>Sample: Danish offenders sentenced to CS and imprisonment</p></li>
+<li><p>Results: CS \(\rightarrow\) Less recidivism</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-53'>
+  
+  <p><img src="assets/fig/fig-cs-unmatch.png" alt="Unmatched data"></p>
+
+</section>
+<section class='' data-state='' id='slide-54'>
+  
+  <p><img src="assets/fig/fig-cs-full.png" alt="Matched data"></p>
+
+</section>
+<section class='' data-state='' id='slide-55'>
+  <h3>Why does people use matching?</h3>
+  <ul>
+<li>Researchers&#39; justifications for matching (Miller <a href="https://sites.google.com/site/mkmtwo/Miller-Matching.pdf?attredirects=0">2015</a>, 31)</li>
+</ul>
+
+<p><img src="assets/fig/fig-matching-lit.png" alt="Matching in the literature"></p>
+
+</section>
+<section class='' data-state='' id='slide-56'>
+  <h3>Do we have unconfoundedness?</h3>
+  <ul>
+<li><p>Can we assess \(Pr[W | X, Y(1), Y(0)] = Pr(W | X)\)?</p></li>
+<li><p>No. (FPCI, right?)</p></li>
+<li><p>However, conduct robustness tests. </p>
+
+<ul>
+<li>Compare different control groups (there should be no treatment effect)</li>
+<li>Use pre-treatment outcome (there should be no treatment effect)</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-57'>
+  <h3>Matching: Seperating design from analysis</h3>
+  <ul>
+<li><p>Focus on matching, i.e. ensuring overlap and balance between control and treatment group</p></li>
+<li><p>Only when we have two comparable groups: estimate the treatment effect</p></li>
+<li><p>While we (in theory) only test the outcome once, in practice this is not what is going on</p></li>
+<li><p>Researchers can modify the matching procedure <em>after</em> estimating treatment effects. Bias?</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-58'>
+  <h3>Problems with matching</h3>
+  <ul>
+<li><p>Multiple steps, multiple ways to induce bias.</p>
+
+<ul>
+<li>&#39;Researcher Degrees of Freedom&#39;</li>
+<li>Consciously and unconsciously</li>
+</ul></li>
+<li><p>Misleading research</p></li>
+<li><p>Dishonest research</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-59'>
+  <h3>Remember</h3>
+  <ul>
+<li><p>Matching is not a solution to the FPCI.</p></li>
+<li><p>It&#39;s still all about having a good design</p>
+
+<ul>
+<li>Randomization \(\rightarrow\) balance</li>
+<li>Balance \(\not\rightarrow\) randomization</li>
+</ul></li>
+<li><p>Observables can account for the selection process into treatment</p></li>
+<li><p>Two problems we want to address:</p>
+
+<ul>
+<li>Lack of overlap between treatment and control</li>
+<li>No covariate balance between treatment and control</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-60'>
+  <h3>Tomorrow</h3>
+  <ul>
+<li><p>Lab session: Introduction to R</p></li>
+<li><p>Be there or be square</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-61'>
+  <h3>Next week</h3>
+  <ul>
+<li><p>Regression-Discontinuity Designs</p></li>
+<li><p>Lab session: Matching in R and STATA</p></li>
+</ul>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="./frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="./frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'simple', 
+    transition: Reveal.getQueryHash().transition || 'fade', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: './frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: './frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: './frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: './frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="./widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="./highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>

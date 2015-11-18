@@ -13,7 +13,7 @@ The course is teached together with Sune Welling Hansen and Robert Klemmensen. T
 ## Slides
 
 - Lecture 10: [Experiments and Causal Inference](http://erikgahner.github.io/slides/aas2015-w10-experiments/experiments.html)
-- Lecture 11: Matching and Propensity Scores
+- Lecture 11: [Matching and Propensity Scores](http://erikgahner.github.io/slides/aas2015-w11-matching/matching.html)
 - Lecture 12: Regression-Discontinuity Designs
 - Lecture 13: Instrumental Variable Regression
 
