@@ -15,6 +15,8 @@ sqrt(81)
 ## The arrow is identical to using "=", but please stick to "<-"
 x <- 2  ## You can also type 2 -> x
 
+x
+
 # Logical operations (you get TRUE or FALSE)
 x == 2        # Try to change the value of x above (e.g. to 3).
 x == 3        # "==" means "equal to"
@@ -29,7 +31,7 @@ class(x)      # x is a number, thus a numeric class
 
 # By the way, R is case sensitive
 class(X)  # x != X
-Class(X)  # Class() != class()
+Class(x)  # Class() != class()
 
 # We can use our object for whatever we feel for
 x       # show the value in the object
@@ -49,10 +51,11 @@ y       # show the value of y
 1:10 + 2  # Why? 
 
 # We can also combine numbers into vectors and lists
-c(2, 2)
+c(2, 2, 2)
 
 # Let us save a numeric vector
 x <- c(14, 6, 23, 2)
+x
 x * 2
 
 # Is it a numeric vector?
@@ -60,7 +63,7 @@ is.numeric(x)
 is.character(x)   # We will get to characters in a moment
 
 # What is the second number?
-x[2]
+x[3]
 
 # Can we remove the second number? Yes.
 x[-2]
@@ -125,13 +128,13 @@ pol
 # Similar to "browse" in Stata
 View(pol)
 
-# Show the first five observations
+# Show the first six observations
 head(pol)
 
 # Show the first three observations
 head(pol, 3)
 
-# Show the last five observations
+# Show the last six observations
 tail(pol)
 
 # The class should be a data frame
@@ -174,6 +177,7 @@ ggplot(pol, aes(x=vote, y=seat)) +
 
 # Create a variable with colours 
 pol$rw.c <- ifelse(pol$rw==1, "blue", "red")
+
 
 # Add colours
 ggplot(pol, aes(x=vote, y=seat)) +
@@ -221,9 +225,14 @@ summary(lacour)
 reg.ssm <- lm(SSM_Level ~ Therm_Level, data=lacour)  # In Stata: reg SSM_level Therm_Level
 summary(reg.ssm)
 
+library(stargazer)
+?stargazer
+stargazer(reg.ssm, type="text")
+
 # Let's see if people interviewed in Wave 2 are more likely to have positive feelings toward gays
 reg.therm <- lm(Therm_Change ~ Treatment_Assignment, data=lacour[lacour$wave==2 & lacour$Contact!="Secondary",])
 summary(reg.therm)
+stargazer(reg.therm, type="text")
 
 # Last, we can see all we have
 ls()
