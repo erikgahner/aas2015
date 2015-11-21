@@ -4,11 +4,15 @@
 
 Advanced Applied Statistics provide students with the tools and knowledge required to conduct empirical analyses with relevance for academic as well as practical work. 
 
-The course is teached together with Sune Welling Hansen and Robert Klemmensen. This folder containts material related to the four lectures teached by Erik Gahner Larsen. More specifically: 
+The course is teached together with Sune Welling Hansen and Robert Klemmensen. This folder containts material related to the four lectures on experiments, matching, RDD and IV estimation. 
+
+The content of the repository: 
 
 - A detailed description of the course (`coursedescription.pdf`)
-- An overview of the required and recommended readings (with hyperlinks when possible)
-- Teaching material in the form of HTML slides and Rmd files needed to reproduce the slides
+- Teaching material (and .Rmd files needed to reproduce the slides)
+- Assignments provided to the students _prior_ to the lectures
+- Lab session material on R (lab 6) and matching (lab 7)
+- An overview of the required and recommended readings (with links to gated and ungated versions when accessible)
 
 ## Slides
 
@@ -86,7 +90,7 @@ Shadish, W. R., T. D. Cook & D. T. Campbell. 2002. _Experimental and Quasi-Exper
 
 **Recommended reading in Danish:**
 
-Olsen, A. L. 2014. Tærskelvariable og tærskelværdier: en introduktion til regressions-diskontinuitetsdesignet. _politica_ 46(1): 42-59. ([gated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/olsen.pdf))
+Olsen, A. L. 2014. Tærskelvariable og tærskelværdier: en introduktion til regressions-diskontinuitetsdesignet. _politica_ 46(1): 42-59. ([ungated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/olsen.pdf))
  
 ### Lecture 13: Instrumental Variable Regression
 
