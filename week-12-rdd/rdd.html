@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Regression Discontinuity Designs</title>
+  <meta name="description" content="">
+  <meta name="author" content="Erik Gahner Larsen">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="./frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="./frameworks/revealjs/css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="./highlighters/highlight.js/css/solarized_dark.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  <h3>Regression Discontinuity Designs</h3>
+  <h4>Advanced applied statistics, 2015</h4>
+
+<h5>Erik Gahner Larsen</h5>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h2>Agenda</h2>
+  <ul>
+<li><p>Experiments and natural experiments</p></li>
+<li><p>Regression discontinuity designs</p></li>
+<li><p>How to do it in R and STATA</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  <h3>Last week</h3>
+  <ul>
+<li><p>Causal inference and observational studies</p></li>
+<li><p>Use of matching methods to create overlap and balance between treatment and control group</p></li>
+<li><p>Estimate average treatment effects and average treatment effects on the treated</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-4'>
+  <h3>Natural experiments</h3>
+  <p>&quot;Katrina was an act of nature that was close to what a political scientist would have liked to have done if he or she could - intervening and changing the political makeup of several large U.S. cities such as New Orleans, Houston, and Atlanta.&quot; (Morton and Williams <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/experimental-political-science-and-study-causality-nature-lab">2010</a>, 53)</p>
+
+</section>
+<section class='' data-state='' id='slide-5'>
+  <h3>How are natural experiments different from traditional experiments?</h3>
+  <p>&quot;However, unlike true experiments, the data used in natural experiments come from &quot;naturally&quot; occurring phenomena - actually, in the social sciences, from phenomena that are often the product of social and political forces. Because the manipulation of treatment variables is not generally under the control of the analyst, natural experiments are, in fact, observational studies.&quot; (Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>, 16)</p>
+
+</section>
+<section class='' data-state='' id='slide-6'>
+  
+  <p>&quot;Although natural experiments offer significant advantages, they do not possess key benefits of actual experiments and hence require careful theoretical and statistical work to make valid inferences.&quot; (Sekhon and Titiunik <a href="http://journals.cambridge.org/action/displayAbstract?fromPage=online&amp;aid=8504677&amp;fileId=S0003055411000542">2012</a>, 53)</p>
+
+</section>
+<section class='' data-state='' id='slide-7'>
+  
+  <p>&quot;Without an experiment, a natural experiment, <strong>a discontinuity</strong>, or some other strong design, no amount of econometric or statistical modeling can make the move from correlation to causation persuasive.&quot; (Sekhon <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev.polisci.11.060606.135444">2009</a>, 503)</p>
+
+</section>
+<section class='' data-state='' id='slide-8'>
+  <h3>Do we need an overlap to make causal inferences?</h3>
+  <ul>
+<li><p>No, we can even utilize the lack of overlap</p></li>
+<li><p>A lack of overlap can sometimes be explained by a covariate that assign treatment to units: &quot;Regression discontinuity is an approach for dealing with this extreme case of lack of overlap in which the assignment mechanism is clearly defined&quot; (Gelman and Hill <a href="http://www.cambridge.org/us/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models">2007</a>, 212)</p></li>
+<li><p>So, today: Regression discontinuity designs (RDD)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-9'>
+  <h3>Regression discontinuity designs in a nutshell</h3>
+  <ul>
+<li><p>An identification strategy that creates treatment and control groups by utilizing instances where continuous variables are made into categorical variables due to clear cutoff values</p></li>
+<li><p>Units scoring above/below a cutoff point in assigned to the treatment/control group</p></li>
+<li><p>Treatment assignment is a deterministic function of a forcing variable (assignment by rule, not randomization)</p></li>
+<li><p>As-if randomness in the window around the cutoff point</p></li>
+<li><p>Treatment effect: Difference in outcome variable between units <em>just</em> above and <em>just</em> below the cutoff point</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-10'>
+  <h3>Forcing variable</h3>
+  <p><img src="assets/fig/unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+</section>
+<section class='' data-state='' id='slide-11'>
+  <h3>Example: Vote share, two party system</h3>
+  <p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+</section>
+<section class='' data-state='' id='slide-12'>
+  
+  <p>&quot;In a regression-discontinuity design, treatment assignment is determined by the value of a covariate, sometimes called a forcing variable, and there is a sharp discontiniuity in the probability of receiving treatment at a particular threshold value of this covariate&quot; (Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>, 64)</p>
+
+</section>
+<section class='' data-state='' id='slide-13'>
+  <h3>Sharp and fuzzy regression discontinuities</h3>
+  <ul>
+<li><p>Two types of RDD:</p>
+
+<ul>
+<li>Sharp (SRD): <em>All</em> units with a score above a cutoff is assigned to treatment</li>
+<li>Fuzzy (FRD): Propensity to be treated increases at cutoff point. Compliance with treatment is imperfect (not fully determined treatment assignment). Think of the ITT estimator.</li>
+</ul></li>
+<li><p>We will focus on sharp RDDs. </p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-14'>
+  <h3>RDD in the Neyman-Rubin causal model</h3>
+  <ul>
+<li><p>We are (still) interested in potential outcomes to define causal effects</p></li>
+<li><p>For individual <em>i</em>, we have a potential outcome: \(Y_{i}\)</p></li>
+<li><p>Treatment: \(W_{i}\)</p></li>
+<li><p>Potential outcome given treatment status: \(Y_{i}(W_{i})\)</p></li>
+<li><p>Two potential outcomes: \(Y_{i}(1), Y_{i}(0)\)</p></li>
+<li><p>Forcing variable: \(X_{i}\) (covariate, running variable)</p></li>
+<li><p>Cutoff value: \(c\) (discontinuity)</p></li>
+<li><p>Treatment assignment given by:</p></li>
+</ul>
+
+<p>\(W_{i} = \begin{cases} W_{i} = 1  & if X_{i} \geq c \\  W_{i} = 0 & if X_{i} < c \end{cases}\)</p>
+
+</section>
+<section class='' data-state='' id='slide-15'>
+  <h3>Average treatment effects</h3>
+  <ul>
+<li><p>FPCI: We only observe the outcome under treatment or control for each unit. We never observe both units for the same value of \(X_{i}\).</p></li>
+<li><p>\(X_{i}\) is often correlated with \(Y_{i}\). Simply comparing treatment and control does not provide causal estimates!</p></li>
+<li><p>We use the discontinuity in \(E[Y_{i}|X_{i}]\) at the cutoff value \(X_{i} = c\) to estimate the effect of \(W_{i}\) on \(Y_{i}\).</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-16'>
+  <h3>Average treatment effect</h3>
+  <ul>
+<li><p>Extrapolation</p>
+
+<ul>
+<li>The extrapolation is a counterfactual (potential outcome)</li>
+<li>Below cutoff point: only non-treated observations</li>
+<li>Above cutoff point: only treated observations</li>
+</ul></li>
+<li><p>Treatment effects are often local</p>
+
+<ul>
+<li><em>Local</em> average treatment effect (LATE)</li>
+<li>Identified at the cutoff point</li>
+</ul></li>
+</ul>
+
+<p>\[\tau = \lim_{x \downarrow c} E[Y(1)|X=c] - \lim_{x \uparrow c} E[Y(0)|X=c]\]</p>
+
+</section>
+<section class='' data-state='' id='slide-17'>
+  
+  <p><img src="assets/fig/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+</section>
+<section class='' data-state='' id='slide-18'>
+  
+  <p><img src="assets/fig/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"> </p>
+
+</section>
+<section class='' data-state='' id='slide-19'>
+  
+  <p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"> </p>
+
+</section>
+<section class='' data-state='' id='slide-20'>
+  
+  <p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"> </p>
+
+</section>
+<section class='' data-state='' id='slide-21'>
+  <h3>Bandwidth choice</h3>
+  <ul>
+<li><p>Bandwidth (\(h\)): the width of the window of observations used to estimate LATE</p></li>
+<li><p>Limit the sample:</p></li>
+</ul>
+
+<p>\(c - h \leq X_{i} \leq c + h\)</p>
+
+<ul>
+<li>Lower bandwidth lowers the risk of bias but reduces the number of observations (Green et al. <a href="http://pan.oxfordjournals.org/content/17/4/400.short">2009</a>; Robinson et al. <a href="http://pan.oxfordjournals.org/content/17/4/341.abstract">2009</a>).</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-22'>
+  <h3>As-if randomness around cutoff point</h3>
+  <ul>
+<li><p>The procedure:</p>
+
+<ol>
+<li>Decide on bandwidth</li>
+<li>Treat the data as an experiment</li>
+</ol></li>
+<li><p>Problems:</p>
+
+<ol>
+<li>Arbitrary bandwidth selection</li>
+<li>Biased estimates if not random</li>
+</ol></li>
+<li><p>Suggestions:</p>
+
+<ol>
+<li>Robustness tests (Imbens and Lemieux <a href="http://www.sciencedirect.com/science/article/pii/S0304407607001091">2008</a>, 622)</li>
+<li>DID, matching</li>
+</ol></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-23'>
+  <h3>Examples of forcing variables</h3>
+  <ul>
+<li><p>The forcing variable can be: Vote share in an election, birthdate/age, income, population thresholds, score on a test, geographical distance, stock returns, classroom size, voter numbers</p></li>
+<li><p>Forcing variables are especially applicable in a rule based world, e.g. elections and policies (what we care about)</p></li>
+<li><p>What is a good forcing variable?</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-24'>
+  <h3>Robustness tests</h3>
+  <ul>
+<li><p>\(\uparrow\) Model specification choices \(\rightarrow\) \(\uparrow\) Researcher degrees of freedom</p></li>
+<li><p>Are the results sensitive to alternative model specifications?</p>
+
+<ul>
+<li>Functional form, nonparametric estimation, local-polynomial order</li>
+<li>Bandwidth </li>
+</ul></li>
+<li><p>Make all the robustness tests you can (appendix material)</p></li>
+<li><p>On a practical note: reproduce with different packages and statistical software</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-25'>
+  <h3>Covariates</h3>
+  <ul>
+<li><p>Covariates should not affect the estimate of the treatment effect</p></li>
+<li><p>Covariates should be random around the discontinuity</p>
+
+<ul>
+<li>Remember: as-if random</li>
+</ul></li>
+<li><p>Balance checks: Is there a discontinuity for other covariates at the cutoff point?</p></li>
+<li><p>What kind of balance checks? RDD estimates, and see the procedures introduced last week</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-26'>
+  <h3>Placebo tests</h3>
+  <ul>
+<li><p>Placebo cutoffs. Create other cutoff values and estimate the treatment effect</p></li>
+<li><p>Do we observe similar &quot;jumps&quot; as at the cutoff value? </p>
+
+<ul>
+<li>Similar LATE: Serious problem. Seriously.</li>
+<li>No LATE at placebo cutoffs: Less of a problem, but no guarantee (only absence of evidence)</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-27'>
+  <h3>Sharpness</h3>
+  <ul>
+<li><p>We want <em>sharp</em> discontinuities</p></li>
+<li><p>Estimates can be invalid if individuals can precisely manipulate the assignment (Lee and Lemieux <a href="https://www.aeaweb.org/articles.php?doi=10.1257/jel.48.2.281">2010</a>, 283)</p></li>
+<li><p>Lack of sharpness can result from:</p>
+
+<ul>
+<li>measurement error in forcing variable</li>
+<li>strategic behavior, manipulation of the running variable</li>
+</ul></li>
+<li><p>Forcing variable might not be that &quot;forcing&quot;</p></li>
+<li><p>FRD, estimate ITT, IV-estimation (next week)</p></li>
+<li><p>Units might exploit the discontinuity (i.e. knowledge about cutoff among units can lead to biased effects)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-28'>
+  <h3>Sorting</h3>
+  <ul>
+<li><p>Do units sort around the cutoff?</p></li>
+<li><p>The LATE will be biased if units (or other persons) strategically manipulate values to fall above or below cutoff</p></li>
+<li><p>Look at the distribution of \(X_{i}\) at the cutoff (do people sort to the right or left?)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-29'>
+  <h4>RDD recommendations (Eggers et al. <a href="http://onlinelibrary.wiley.com/doi/10.1111/ajps.12127/abstract">2015</a>)</h4>
+  <ol>
+<li><p>Consider theoretical mechanisms that could produce sorting around the discontinuity.</p></li>
+<li><p>Evaluate balance on pretreatment covariates and especially on the lagged outcome variable, focusing on the presence or absence of substantively large imbalances in characteristics that might be related to the mechanisms that could produce sorting. These tests should employ the same specifications as those employed to estimate the effects of interest, and these specifications should account for the potential relationship between the running variable and the outcome variable.</p></li>
+<li><p>Present estimates at a number of alternative bandwidths and specifications.</p></li>
+</ol>
+
+</section>
+<section class='' data-state='' id='slide-30'>
+  <h3>Example: Thistlethwaite and Campbell (<a href="http://psycnet.apa.org/journals/edu/51/6/309">1960</a>)</h3>
+  <ul>
+<li><p>First application of RDD</p></li>
+<li><p>The impact of merit awards (scholarships, \(W_{i}\)) on future academic outcomes (\(Y_{i}\))</p></li>
+<li><p>Awards assigned based on SAT test scores (\(X_{i}\))</p></li>
+<li><p>Score just above \(c\) \(\rightarrow\) award</p></li>
+<li><p>What if we study the correlation between \(X_{i}\) and \(Y_{i}\)?</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-31'>
+  <h3>Example: Thistlethwaite and Campbell (<a href="http://psycnet.apa.org/journals/edu/51/6/309">1960</a>)</h3>
+  <ul>
+<li><p>Confoundedness: \(X_{i}\) is correlated with \(Y_{i}(0)\) and \(Y_{i}(1)\)</p>
+
+<ul>
+<li>Higher score \(\rightarrow\) higher earnings, higher college grades</li>
+</ul></li>
+<li><p>Solution: Compare observations <em>just</em> above and <em>just</em> below the score cutoff point</p></li>
+<li><p>\(E[Y_{i}(1)|X_{i}]\) and \(E[Y_{i}(0)|X_{i}]\) are continuous functions of \(X_{i}\) at \(X_{i} = c\)</p></li>
+<li><p>Discontinuity in \(E[Y_{i}|X_{i}]\) at \(X_{i} = c\) </p>
+
+<ul>
+<li>Treatment group (\(W_{i}(1)\)): Above cut-off and did receive award</li>
+<li>Control group (\(W_{i}(0)\)): Below cut-off and <strong>did not</strong> receive award</li>
+<li>Impact of award receipt for persons near the cutoff</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-32'>
+  <h3>Example: Spanish-language ballots</h3>
+  <ul>
+<li><p>Hopkins (<a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2011.00534.x/abstract">2011</a>): Translating into Votes: The Electoral Impacts of Spanish-Language Ballots</p></li>
+<li><p>Question: What is the impact of language assistance on voter turnout among Latino citizens? </p>
+
+<ul>
+<li>Why not simply study correlation between \(X_{i}\) and \(Y_{i}\)?</li>
+</ul></li>
+<li><p>Forcing variable: U.S. counties with a language minority +10,000 citizens must provide Spanish-language ballots (Voting Rights Act)</p></li>
+<li><p>Forcing variable (\(X\)): Population size of the language minority in each county </p></li>
+<li><p>Cutoff value (\(c\)): 10,000. Treatment (\(W_{i}\)): presence of Spanish-language ballots.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-33'>
+  
+  <p><img src="assets/fig/fig-hopkins.png" alt="Hopkins 2011"></p>
+
+</section>
+<section class='' data-state='' id='slide-34'>
+  <h3>Example: Party incumbency advantage</h3>
+  <ul>
+<li><p>Lee (<a href="http://www.sciencedirect.com/science/article/pii/S0304407607001121">2008</a>): Randomized experiments from non-random selection in U.S. House elections</p></li>
+<li><p>Question: How big is the party incumbency advantage?</p></li>
+<li><p>Design: RDD. Democratic vote share where democratic candidates almost won or lost the previous election.</p></li>
+<li><p>Data: Elections to the U.S. House of Representatives (1946 to 1998)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-35'>
+  
+  <p><img src="assets/fig/fig-lee.png" alt="Lee 2008"></p>
+
+</section>
+<section class='' data-state='' id='slide-36'>
+  
+  <ul>
+<li><p>Grimmer et al. (<a href="http://web.stanford.edu/%7Ejgrimmer/CEF.pdf">2011</a>): Gubernatorial and State House control is correlated with winning close elections for the U.S. House</p></li>
+<li><p>Caughey and Sekhon (<a href="http://pan.oxfordjournals.org/content/19/4/385.abstract">2011</a>): Covariate imbalances between near winners and losers.</p></li>
+<li><p>Eggers et al. (<a href="http://onlinelibrary.wiley.com/doi/10.1111/ajps.12127/abstract">2015</a>): No systematic evidence of sorting or imbalance around electoral thresholds.</p></li>
+<li><p>For more: See Hainmueller et al. (<a href="http://polmeth.wustl.edu/media/Paper/HHSrdd_1_2.pdf">2015</a>) and de la Cuesta and Imai (<a href="http://imai.princeton.edu/research/files/RD.pdf">2016</a>).</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-37'>
+  <h2>The validity of RDD</h2>
+  <ul>
+<li><p>Strong internal validity (Cook and Wong <a href="http://www.jstor.org/stable/27917242">2008</a>; Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>; Berk <a href="http://link.springer.com/referenceworkentry/10.1007%2F978-1-4614-5690-2_295">2010</a>, 574)</p></li>
+<li><p>Less external validity (Imbens and Lemieux <a href="http://www.sciencedirect.com/science/article/pii/S0304407607001091">2008</a>, 622)</p></li>
+<li><p>Less conclusion validity</p>
+
+<ul>
+<li>Lower power</li>
+<li>Requires large N to estimate same effect</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-38'>
+  <h2>RDD in R and STATA</h2>
+  <ul>
+<li><p>Multiple packages for R (<code>rddtools</code>, <code>rdrobust</code> etc.)</p></li>
+<li><p>A lot of options (kernel density, bandwidth selection, local-polynomial order etc.)</p></li>
+<li><p>We will focus on the basics</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-39'>
+  <h3>RDD in R (<code>rddtools</code>)</h3>
+  <pre><code class="r"># Load rddtools package
+library(&quot;rddtools&quot;)
+
+# Use data from Lee (2008) 
+data(house)
+
+# Set outcome, forcing and cutoff variable
+house_rdd &lt;- rdd_data(y=y, x=x, cutpoint=0, data=house)
+
+# Estimate RDD
+reg_para &lt;- rdd_reg_lm(rdd_object=house_rdd)
+
+# Print results
+print(reg_para)
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-40'>
+  <h3>RDD in R (<code>rddtools</code>)</h3>
+  <pre><code>## ### RDD regression: parametric ###
+##  Polynomial order:  1 
+##  Slopes:  separate 
+##  Number of obs: 6558 (left: 2740, right: 3818)
+## 
+##  Coefficient:
+##    Estimate Std. Error t value  Pr(&gt;|t|)    
+## D 0.1182314  0.0056799  20.816 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-41'>
+  <h3>RDD in R (<code>rddtools</code>)</h3>
+  <pre><code class="r">plot(reg_para)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9"> </p>
+
+</section>
+<section class='' data-state='' id='slide-42'>
+  <h3>RDD in R (<code>rddtools</code>)</h3>
+  <pre><code class="r"># Restrict sample to bandwidth area
+bw_ik &lt;- rdd_bw_ik(house_rdd)
+reg_para_ik &lt;- rdd_reg_lm(rdd_object=house_rdd, bw=bw_ik)
+reg_para_ik
+</code></pre>
+
+<pre><code>## ### RDD regression: parametric ###
+##  Polynomial order:  1 
+##  Slopes:  separate 
+##  Bandwidth:  0.2938561 
+##  Number of obs: 3200 (left: 1594, right: 1606)
+## 
+##  Coefficient:
+##    Estimate Std. Error t value  Pr(&gt;|t|)    
+## D 0.0823378  0.0080236  10.262 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-43'>
+  <h3>RDD in R (<code>rddtools</code>)</h3>
+  <pre><code class="r">plot(reg_para_ik)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-11-1.png" alt="plot of chunk unnamed-chunk-11"> </p>
+
+</section>
+<section class='' data-state='' id='slide-44'>
+  <h3>RDD in R (<code>rdrobust</code>)</h3>
+  <pre><code class="r"># Load rdrobust package
+library(&quot;rdrobust&quot;)
+
+# Estimate effect
+rdrobust(house$y, house$x)
+</code></pre>
+
+<pre><code>## Call:
+## rdrobust(y = house$y, x = house$x)
+## 
+## Summary:
+##                         
+## Number of Obs 6558      
+## NN Matches    3         
+## BW Type       CCT       
+## Kernel Type   Triangular
+## 
+##                    Left   Right 
+## Number of Obs      828    859   
+## Order Loc Poly (p) 1      1     
+## Order Bias (q)     2      2     
+## BW Loc Poly (h)    0.1429 0.1429
+## BW Bias (b)        0.2542 0.2542
+## rho (h/b)          0.5620 0.5620
+## 
+## Estimates:
+##              Coef   Std. Err. z      P&gt;|z|  CI Lower CI Upper
+## Conventional 0.0650 0.0108    6.0322 0.0000 0.0439   0.0861  
+## Robust                               0.0000 0.0366   0.0847
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-45'>
+  <h3>RDD in R (<code>rdrobust</code>)</h3>
+  <pre><code class="r">rdplot(house$y, house$x)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13"> </p>
+
+</section>
+<section class='' data-state='' id='slide-46'>
+  <h3>RDD in STATA (<code>rdrobust</code>)</h3>
+  <ul>
+<li><p><code>rdrobust</code> is also available in STATA</p></li>
+<li><p>Can be installed via <code>ssc install</code> but the easy way is just to go through: </p></li>
+</ul>
+
+<p><code>. findit rdrobust</code></p>
+
+<ul>
+<li><p>RDD estimate: </p>
+
+<p><code>. rdrobust y x, c(0) bwselect(IK) all</code></p></li>
+<li><p>RDD plot: </p>
+
+<p><code>. rdplot y x, c(0) bwselect(IK)</code></p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-47'>
+  <h1>WARNING!</h1>
+  <p>STATA plot on next slide</p>
+
+</section>
+<section class='' data-state='' id='slide-48'>
+  
+  <p><img src="assets/fig/fig-rdplot-stata.png" alt="RDD Stata plot"></p>
+
+</section>
+<section class='' data-state='' id='slide-49'>
+  <h3>Conclusion</h3>
+  <ul>
+<li><p>Three components: Outcome, forcing variable, cutoff</p></li>
+<li><p>Validity depends upon the quality of the design and data</p></li>
+<li><p>Do graphs. Do a lot of graphs.</p></li>
+<li><p>Further reading: Skovron and Titiunik (<a href="http://www-personal.umich.edu/%7Etitiunik/papers/SkovronTitiunik2015.pdf">2015</a>): A Practical Guide to Regression Discontinuity Designs in Political Science (see also the supplementary material for a list of examples on RDD studies)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-50'>
+  <h3>Schedule</h3>
+  <ul>
+<li><p>Next week: IV-estimation</p></li>
+<li><p>Tomorrow: Matching in R and STATA</p></li>
+<li><p>Mandatory Assignment 4. <em>Good luck</em>. </p></li>
+</ul>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="./frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="./frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'simple', 
+    transition: Reveal.getQueryHash().transition || 'fade', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: './frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: './frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: './frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: './frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="./widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="./highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>

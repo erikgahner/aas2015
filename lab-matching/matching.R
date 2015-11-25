@@ -174,7 +174,7 @@ stargazer(reg.nn, reg.genetic, reg.optimal, reg.cem, type="text")
 df.reg.unmatched <- data.frame(name = "Unmatched", coef = coef(summary(reg.unmatched))["treat","Estimate"], se = coef(summary(reg.unmatched))["treat","Std. Error"])
 df.reg.matched <- data.frame(name = "Matched (NN, arm)", coef = coef(summary(reg.matched))["treat","Estimate"], se = coef(summary(reg.matched))["treat","Std. Error"])
 df.reg.nn <- data.frame(name = "Matched (NN)", coef = coef(summary(reg.nn))["treat","Estimate"], se = coef(summary(reg.nn))["treat","Std. Error"])
-df.reg.genetic <- data.frame(name = "Matched (Gentic)", coef = coef(summary(reg.genetic))["treat","Estimate"], se = coef(summary(reg.genetic))["treat","Std. Error"])
+df.reg.genetic <- data.frame(name = "Matched (Genetic)", coef = coef(summary(reg.genetic))["treat","Estimate"], se = coef(summary(reg.genetic))["treat","Std. Error"])
 df.reg.optimal <- data.frame(name = "Matched (Optimal)", coef = coef(summary(reg.optimal))["treat","Estimate"], se = coef(summary(reg.optimal))["treat","Std. Error"])
 df.reg.cem <- data.frame(name = "Matched (CEM)", coef = coef(summary(reg.cem))["treat","Estimate"], se = coef(summary(reg.cem))["treat","Std. Error"])
 
