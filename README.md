@@ -18,7 +18,7 @@ The content of the repository:
 
 - Lecture 10: [Experiments and Causal Inference](http://erikgahner.github.io/slides/aas2015-w10-experiments/experiments.html)
 - Lecture 11: [Matching and Propensity Scores](http://erikgahner.github.io/slides/aas2015-w11-matching/matching.html)
-- Lecture 12: Regression-Discontinuity Designs
+- Lecture 12: [Regression Discontinuity Designs](http://erikgahner.github.io/slides/aas2015-w12-rdd/rdd.html)
 - Lecture 13: Instrumental Variable Regression
 
 ## Readings
@@ -72,7 +72,7 @@ Guo, S. & M. W. Fraser. 2010. _Propensity Score Analysis: Statistical Methods an
 
 Justesen, M. K. & R. Klemmensen. 2014. Sammenligning af sammenlignelige observationer: kausalitet, matching og observationsdata. _politica_ 46(1): 60-78. ([ungated](http://politica.dk/fileadmin/politica/Dokumenter/politica_46_1/justesen_og_klemmensen.pdf))
  
-### Lecture 12: Regression-Discontinuity Designs
+### Lecture 12: Regression Discontinuity Designs
 
 **Required readings:**
 
