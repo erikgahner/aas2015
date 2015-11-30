@@ -14,9 +14,9 @@ library("gridExtra")
 library("MatchIt")
 library("optmatch")
 library("survival")
-library("cem")
 library("RItools")
 library("arm")        
+
 
 # Set our random number to make sure we get the same output
 set.seed(30134002)
@@ -162,24 +162,15 @@ reg.optimal <- lm(re78 ~ treat, data=m.optimal.data, weights = weights)
 
 stargazer(reg.nn, reg.genetic, reg.optimal, type="text")
 
-# And for coarsened exact matching
-m.cem <- matchit(treat.f, method = "cem", data = lal)
-m.cem
-
-m.cem.data <- match.data(m.cem)
-reg.cem <- lm(re78 ~ treat, data=m.cem.data, weights = weights)
-stargazer(reg.nn, reg.genetic, reg.optimal, reg.cem, type="text")
-
 # Save the results from the regressions in new data frames
 df.reg.unmatched <- data.frame(name = "Unmatched", coef = coef(summary(reg.unmatched))["treat","Estimate"], se = coef(summary(reg.unmatched))["treat","Std. Error"])
 df.reg.matched <- data.frame(name = "Matched (NN, arm)", coef = coef(summary(reg.matched))["treat","Estimate"], se = coef(summary(reg.matched))["treat","Std. Error"])
 df.reg.nn <- data.frame(name = "Matched (NN)", coef = coef(summary(reg.nn))["treat","Estimate"], se = coef(summary(reg.nn))["treat","Std. Error"])
 df.reg.genetic <- data.frame(name = "Matched (Genetic)", coef = coef(summary(reg.genetic))["treat","Estimate"], se = coef(summary(reg.genetic))["treat","Std. Error"])
 df.reg.optimal <- data.frame(name = "Matched (Optimal)", coef = coef(summary(reg.optimal))["treat","Estimate"], se = coef(summary(reg.optimal))["treat","Std. Error"])
-df.reg.cem <- data.frame(name = "Matched (CEM)", coef = coef(summary(reg.cem))["treat","Estimate"], se = coef(summary(reg.cem))["treat","Std. Error"])
 
 # Create one data frame with all the results
-df.reg <- data.frame(rbind(df.reg.unmatched, df.reg.matched, df.reg.nn, df.reg.genetic, df.reg.optimal, df.reg.cem))
+df.reg <- data.frame(rbind(df.reg.unmatched, df.reg.matched, df.reg.nn, df.reg.genetic, df.reg.optimal))
 
 # Plot the effects in one plot
 fig.effects <- ggplot(df.reg, aes(colour = name)) + 

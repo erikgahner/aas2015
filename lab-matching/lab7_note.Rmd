@@ -10,7 +10,7 @@ In this lab session we will focus on preprocessing our data using different matc
 
 ## I. Install the packages
 
-We are going to use a variety of packages. The packages listed in `matching.R` (from line 5 to 19) are required to run the remainder of the file (or will be loaded automatically by the required packages). Use the `install.packages()` function to install the packages. 
+We are going to use a variety of packages. The packages listed in `matching.R` (from line 5 to 18) are required to run the remainder of the file (or will be loaded automatically by the required packages). Use the `install.packages()` function to install the packages. 
 
 ## II. Inspect the `lalonde` data
 
