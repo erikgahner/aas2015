@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Instrumental Variable Regression</title>
+  <meta name="description" content="">
+  <meta name="author" content="Erik Gahner Larsen">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="./frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="./frameworks/revealjs/css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="./highlighters/highlight.js/css/solarized_dark.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  <h3>Instrumental Variable Regression</h3>
+  <h4>Advanced applied statistics, 2015</h4>
+
+<h5>Erik Gahner Larsen</h5>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h2>Agenda</h2>
+  <ul>
+<li><p>Instrumental variable (IV) regression</p></li>
+<li><p>IV and LATE</p></li>
+<li><p>IV and regressions</p></li>
+<li><p>IV in STATA and R</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  <h2>IV between design and statistics</h2>
+  <ul>
+<li><p>&quot;Instrumental-variable analysis can therefore be positioned between the poles of design-based and model-based inference, depending on the application.&quot; (Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>, 153)</p></li>
+<li><p>It&#39;s still about design-based causal inference</p>
+
+<ul>
+<li>Design \(>\) statistics</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-4'>
+  <h3>What is an instrumental variable (IV)?</h3>
+  <p>&quot;An instrument is a variable thought to randomly induce variation in the treatment variable of interest.&quot; (Gelman and Hill <a href="http://www.cambridge.org/us/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models">2007</a>, 216)</p>
+
+<ul>
+<li><p>First, think of assignment to treatment (\(W_{i}\)) as the instrument</p></li>
+<li><p>We want causal estimands in settings with noncompliance</p></li>
+<li><p>Task: To estimate the treatment effect for units who always comply with their assignment.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-5'>
+  <h4>Example: Noncompliance with Encouragement \(W_{i}\) to Exercise \(D_{i}\)</h4>
+  <ul>
+<li><p>From Table 5.5 in Rosenbaum (<a href="http://www.springer.com/us/book/9780387989679">2002</a>, 182).</p></li>
+<li><p>Y: forced expiratory volume (higher numbers signifying better lung function)</p></li>
+<li><p>Will subject exercice with encouragement? (\(d_{i}(1)\))</p></li>
+<li><p>Will subject exercice without encouragement? (\(d_{i}(0)\))</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-6'>
+  <h4>Example: Noncompliance with Encouragement \(W_{i}\) to Exercise \(D_{i}\)</h4>
+  <table><thead>
+<tr>
+<th>User <em>i</em> &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(d_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(1)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(Y_{i}(0)\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(W_{i}\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(D_{i}\) &nbsp;&nbsp;&nbsp;</th>
+<th align="center">\(R_{i}\)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">71</td>
+<td align="center">71</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">71</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">68</td>
+<td align="center">68</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">68</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">64</td>
+<td align="center">59</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">64</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">62</td>
+<td align="center">57</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">57</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">59</td>
+<td align="center">54</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">54</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">57</td>
+<td align="center">52</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">57</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">56</td>
+<td align="center">51</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">56</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">56</td>
+<td align="center">51</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">51</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">42</td>
+<td align="center">42</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">42</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">39</td>
+<td align="center">39</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">39</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class='' data-state='' id='slide-7'>
+  <h3>Assignment to treatment, instrument</h3>
+  <ul>
+<li><p>We use IV to estimate the effect of treatment on compliers</p></li>
+<li><p>Instrument: \(W_{i}\) (assignment to treatment)</p></li>
+<li><p>Treatment status: \(D_{i}(W) \in \{0,1\}\)</p></li>
+<li><p>Imperfect compliance, so \(W_{i} \neq\) \(D_{i}\) for some units</p></li>
+<li><p>The outcome, \(Y_{i}\), is a function of W and D: \(Y_{i}(W,D)\)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-8'>
+  <h3>Assignment to treatment, instrument</h3>
+  <ul>
+<li><p>The causal effect of W on Y (ITT): \(Y_{i}(1,D_{i}(1)) - Y_{i}(0,D_{i}(0))\)</p></li>
+<li><p>What is the issue with ITT (the reduced-form result)? Non-compliance</p></li>
+<li><p>Task: We want to estimate the causal effect for those who comply</p>
+
+<ul>
+<li>The effect of D on Y for units affected in treatment status by instrument</li>
+<li>Local average treatment effect (LATE)</li>
+<li>&quot;Local average treatment effects can be estimated by comparing the average outcome Y and treatment D at two different values of the instrument&quot; (Imbens and Angrist <a href="http://www.jstor.org/stable/2951620">1994</a>, 470)</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-9'>
+  <h3>Assignment to treatment, instrument</h3>
+  <ul>
+<li><p>Assumptions: <em>Independence</em>, <em>first stage</em>, <em>monotonicity</em></p></li>
+<li><p>Independence: \((Y(1),Y(0),D(1),D(0)) \perp W\)</p>
+
+<ul>
+<li>We can identify the causal effect of the instrument</li>
+<li>Potential outcomes implies exclusion restriction (<em>exogenous</em>): </li>
+<li>Assignment (W) has no direct effect on outcome (Y)</li>
+</ul></li>
+<li><p>First stage (<em>relevance</em>): \(0 < Pr(W = 1) < 1\) and \(Pr(D_{i} = 1) \neq Pr(D_{0} = 1)\)</p>
+
+<ul>
+<li>\(W\) has an effect on \(D\)</li>
+<li>\(E[D_{i}|W_{i} = 1] - E[D_{i}|W_{i} = 0] \neq 0\)</li>
+</ul></li>
+<li><p>Monotonicity (<em>no defiers</em>)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-10'>
+  <h3>Assignment to treatment, instrument</h3>
+  <ul>
+<li><p>The average effect of W on D is Pr(complier). Why?</p>
+
+<ul>
+<li>For compliers: \(D_{i}(1) - D_{i}(0) = 1\)</li>
+<li>For non-compliers (assuming no defiers): \(D_{i}(1) - D_{i}(0) = 0\)</li>
+</ul></li>
+<li><p>The causal interpretation of the IV estimand (Angrist et al. <a href="http://www.tandfonline.com/doi/abs/10.1080/01621459.1996.10476902">1996</a>, 448): </p></li>
+</ul>
+
+<p>\(\tau_{LATE} = E(Y_{i}(1)-Y_{i}(0)|complier)\)</p>
+
+<ul>
+<li>LATE: The average causal effect of \(D\) on \(Y\) for compliers, i.e. units affected in treatment status by instrument</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-11'>
+  <h3>Local average treatment effect</h3>
+  <ul>
+<li><p>Should we care about LATE? Depends upon the instrument</p>
+
+<ul>
+<li>Different instruments, different effect parameters</li>
+</ul></li>
+<li><p>What about always-takers and never-takers?</p>
+
+<ul>
+<li>We only capture effects for those who change treatment status due to treatment assignment</li>
+<li>For always-takers and never-takers, treatment status is unchanged</li>
+</ul></li>
+<li><p>Always think about IVs as LATE</p></li>
+<li><p>Estimate both ITT and LATE to maximize what we can learn about the intervention (Gelman and Hill <a href="http://www.cambridge.org/us/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models">2007</a>, 220)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-12'>
+  <h3>Example: Class size and achievement test scores</h3>
+  <ul>
+<li><p>Random assignment to smaller or larger class</p></li>
+<li><p>Krueger (<a href="http://qje.oxfordjournals.org/content/114/2/497.abstract">1999</a>): &quot;initial random assignment is used as an instrumental variable for actual class size.&quot; (p. 507)</p></li>
+<li><p>&quot;It is possible that some students were switched from their randomly assigned class to another class before school started or early in the fall.&quot; (p. 502)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-13'>
+  <h3>Example: Class size and achievement test scores</h3>
+  <p><img src="assets/fig/krueger1999a.png" alt="Krueger 1999, results"></p>
+
+</section>
+<section class='' data-state='' id='slide-14'>
+  <h3>Example: Class size and achievement test scores</h3>
+  <p><img src="assets/fig/krueger1999b.png" alt="Krueger 1999, 2SLS"></p>
+
+</section>
+<section class='' data-state='' id='slide-15'>
+  <h1>2SLS?</h1>
+  
+</section>
+<section class='' data-state='' id='slide-16'>
+  <h3>Instrumental variables and regressions</h3>
+  <ul>
+<li><p>A simpe structural model</p></li>
+<li><p>First stage: \(D_{i} = \alpha_{0} + \alpha_{1}W_{i}+\upsilon_{i}\)</p></li>
+<li><p>Second stage: \(Y_{i} = \beta_{0} + \beta_{1}D_{i}+\epsilon_{i}\)</p></li>
+<li><p>What is the causal effect of \(D\) on \(Y\)? \(\beta_{1}\)</p></li>
+<li><p>Two-stage least squares (2SLS/TSLS), method to calculate IV estimates</p></li>
+<li><p>Get fitted values from stage 1, regress outcome on fitted values (stage 2)</p>
+
+<ul>
+<li>However, we need to account for the uncertainty in both stages of the model (Gelman and Hill <a href="http://www.cambridge.org/us/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models">2007</a>, 223)</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-17'>
+  <h3>Confounding in experiments and observational studies</h3>
+  <ul>
+<li><p>Confounding in experiments</p>
+
+<ul>
+<li>How? Subjects can accept or decline treatment assignment</li>
+</ul></li>
+<li><p>Confounding in observational studies</p>
+
+<ul>
+<li>How? Good old endogeneity</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-18'>
+  <h3>How do we think about IVs?</h3>
+  <ul>
+<li>&quot;The solution offered by the instrumental-variables design is to find an additional variable - an instrument - that is correlated with the independent variable but could not be influenced by the dependent variable or correlated with its other causes.&quot; (Dunning <a href="http://www.cambridge.org/us/academic/subjects/politics-international-relations/research-methods-politics/natural-experiments-social-sciences-design-based-approach">2012</a>, 87)</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-19'>
+  <h3>How do we think about IVs?</h3>
+  <ul>
+<li><p>&quot;Undoubtedly, however, the most important contemporary use of IV methods is to solve the problem of omitted variables bias (OVB). IV methods solve the problem of missing or unknown control variables, much as a randomized trial obviates extensive controls in a regression.&quot; (Angrist and Pischke <a href="http://press.princeton.edu/titles/8769.html">2009</a>, 115)</p></li>
+<li><p>Most of the time, we use IV regression to study causal inference in non-experimental settings</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-20'>
+  <h3>Error-covariate correlation</h3>
+  <ul>
+<li><p>&quot;IV regression in effect replaces the problematic independent variable with a proxy variable that is uncontaminated by error or unobserved factors that affect the outcome.&quot; (Sovey and Green <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2010.00477.x/abstract">2011</a>, 188)</p></li>
+<li><p>So there is an endogenous relation between our &quot;problematic independent variable&quot; and our outcome</p></li>
+<li><p>Why do we have error-covariate correlations?</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-21'>
+  <h3>Possible causes of error-covariate correlation (Bollen <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev-soc-081309-150141">2012</a>, 40)</h3>
+  <p><img src="assets/fig/bollen2012.png" alt="Bollen 2012"></p>
+
+</section>
+<section class='' data-state='' id='slide-22'>
+  <h3>What can we use as an IV?</h3>
+  <ul>
+<li><p>The sky is the limit</p></li>
+<li><p>Lottery numbers (military service, money), birth month, class size, geographical distance etc.</p></li>
+<li><p>Remember last week? (fuzzy RDD)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-23'>
+  <h3>Example: Name americanization and earnings</h3>
+  <ul>
+<li><p>Biavaschi et al. (<a href="http://ftp.iza.org/dp7725.pdf">2013</a>): Scrabble points as an instrumental variable</p></li>
+<li><p>&quot;Index based on Scrabble points, which captures the degree of linguistic complexity of names upon arrival compared to the linguistic complexity of names at destination.&quot; (p. 2)</p></li>
+<li><p>In other words: You will see a lot of creative IVs out there</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-24'>
+  <h3>Example: Effect of military service on earnings</h3>
+  <ul>
+<li><p>Angrist (<a href="http://www.jstor.org/stable/2006669">1990</a>): The Vietnam Draft Lottery</p></li>
+<li><p>Outcome (Y): Lifetime earnings</p></li>
+<li><p>Treatment status (D): Veteran</p></li>
+<li><p>Mean difference between veterans and non-veterans. Why not?</p></li>
+<li><p>&quot;The draft lottery facilitates estimation of (1) because functions of randomly assigned lottery numbers provide instrumental variables that are correlated with \(s_{i}\), but orthogonal to the error term, \(u_{ir}\).&quot; (p. 319)</p></li>
+<li><p>Draft eligibility is random. We are all about randomization.</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-25'>
+  
+  <p><img src="assets/fig/angrist1990.png" alt="Angrist 1990"></p>
+
+</section>
+<section class='' data-state='' id='slide-26'>
+  <h3>Example: Policing and crime</h3>
+  <ul>
+<li><p>Levitt (<a href="http://www.jstor.org/stable/2951346">1997</a>): The effect of increased police force on crime</p></li>
+<li><p>Why not study the correlation between police force and crime?</p></li>
+<li><p>&quot;Cities with high crime rates, therefore, may tend to have large police forces, even if police reduce crime.&quot; (p. 270)</p></li>
+<li><p>Instrument: Elections</p></li>
+<li><p>&quot;In order to identify the effect of police on crime, a variable is required that affects the size of the police force, but does not belong directly in the crime &quot;production function.&quot; The instrument employed in this paper is the timing of mayoral and gubernatorial elections.&quot; (p. 271)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-27'>
+  
+  <p><img src="assets/fig/levitt1997a.png" alt="Levitt 1997"></p>
+
+</section>
+<section class='' data-state='' id='slide-28'>
+  
+  <p><img src="assets/fig/levitt1997b.png" alt="Levitt 1997"></p>
+
+</section>
+<section class='' data-state='' id='slide-29'>
+  <h3>Example: The causal effect of left-right orientation on support for redistribution</h3>
+  <ul>
+<li><p>Jaeger (<a href="http://ijpor.oxfordjournals.org/content/20/3/363.short">2008</a>): Is there a causal effect of left-right orientation on support for redistribution? </p></li>
+<li><p>Issue: &quot;left-right orientation is likely to be endogenous to welfare state support&quot; (p. 364)</p></li>
+<li><p>IVs: father and mother&#39;s educational attainment, father&#39;s social class</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-30'>
+  <h3>Example: The causal effect of left-right orientation on support for redistribution</h3>
+  <p><img src="assets/fig/jaeger2008a.png" alt="Jaeger 2008, model"></p>
+
+</section>
+<section class='' data-state='' id='slide-31'>
+  <h3>Example: The causal effect of left-right orientation on support for redistribution</h3>
+  <p><img src="assets/fig/jaeger2008b.png" alt="Jaeger 2008, results"></p>
+
+</section>
+<section class='' data-state='' id='slide-32'>
+  <h3>Diagnostic tests: How strong is the instrument?</h3>
+  <ul>
+<li><p>If Cov(D,W) is weak, we have little compliance. Problem?</p></li>
+<li><p>Report the F-test of the instrument from the first stage</p></li>
+<li><p>\(H_{0}\): Instrument is weak</p></li>
+<li><p>Large p-value \(\rightarrow\) weak instrument</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-33'>
+  <h3>Diagnostic tests: Endogeneity</h3>
+  <ul>
+<li><p>Wu-Hausman test: Test difference in estimates from OLS and IV</p></li>
+<li><p>Significant difference \(\rightarrow\) \(D\) is an endogenous variable</p></li>
+<li><p>\(H_{0}\): Variable is exogenous</p></li>
+<li><p>Large p-value \(\rightarrow\) \(D\) is exogenous</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-34'>
+  <h3>Diagnostic tests: Overidentifying restrictions</h3>
+  <ul>
+<li><p>With multiple IVs (e.g. \(W_{1i}\) and \(W_{2i}\)) we can test if one of the instruments are correlated with the structural error</p></li>
+<li><p>In other words: <strong>Not</strong> the unobserved error</p></li>
+<li><p>Estimate IV using \(W_{1i}\) and compute residuals and test whether \(W_{2i}\) correlate with residuals</p></li>
+<li><p>If they correlate, \(W_{2i}\) is not a valid instrument</p></li>
+<li><p>The Sargan test</p></li>
+<li><p>\(H_{0}\): Instrument set is valid, model is correctly specified</p></li>
+<li><p>Large p-value \(\rightarrow\) Instrument is valid</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-35'>
+  <h3>IV in Stata</h3>
+  <ul>
+<li><p>See YouTube: <a href="https://www.youtube.com/watch?v=lbnswRJ1qV0">Instrumental-variables regression using Stata</a></p></li>
+<li><p>Dependent variable: <code>wages</code></p></li>
+<li><p>Endogenous variable: <code>education</code></p></li>
+<li><p>Instrumental variables: <code>meducation</code>, <code>feducation</code></p></li>
+<li><p>We are going to use the <code>ivregress</code> command</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-36'>
+  <h3>IV in Stata: simulated data</h3>
+  <p><img src="assets/fig/stata1.png" alt="Stata, 1"></p>
+
+</section>
+<section class='' data-state='' id='slide-37'>
+  <h3>IV in Stata: results, OLS</h3>
+  <p><img src="assets/fig/stata2.png" alt="Stata, 2"></p>
+
+</section>
+<section class='' data-state='' id='slide-38'>
+  <h3>IV in Stata: results, 2SLS</h3>
+  <p><img src="assets/fig/stata3.png" alt="Stata, 3"></p>
+
+</section>
+<section class='' data-state='' id='slide-39'>
+  <h3>IV in Stata: is education endogenous?</h3>
+  <p><img src="assets/fig/stata4.png" alt="Stata, 4"></p>
+
+</section>
+<section class='' data-state='' id='slide-40'>
+  <h3>IV in Stata: is our IV strong?</h3>
+  <p><img src="assets/fig/stata5.png" alt="Stata, 5"></p>
+
+</section>
+<section class='' data-state='' id='slide-41'>
+  <h3>IV in Stata: are some of our IVs not exogenous?</h3>
+  <p><img src="assets/fig/stata6.png" alt="Stata, 6"></p>
+
+</section>
+<section class='' data-state='' id='slide-42'>
+  <h3>IV in R</h3>
+  <ul>
+<li><p>Multiple packages available</p></li>
+<li><p>We will run IV regressions in two packages</p>
+
+<ul>
+<li><code>tsls()</code> in the <code>sem</code> package</li>
+<li><code>ivreg()</code> in the <code>AER</code> package</li>
+</ul></li>
+<li><p>Both packages have multiple options</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-43'>
+  <h3>IV in R: load the packages</h3>
+  <pre><code class="r">library(rio) # for import()
+library(sem) # for tsls()
+library(AER) # for ivreg()
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-44'>
+  <h3>IV in R: get the data</h3>
+  <pre><code class="r">educwages &lt;- import(&quot;http://www.stata-press.com/data/r14/educwages.dta&quot;)
+educwages[] &lt;- lapply(educwages, unclass)
+head(educwages)
+</code></pre>
+
+<pre><code>##      wages union education meducation feducation
+## 1 43.77223     0  15.25729         13         13
+## 2 46.30014     1  14.48497         11         12
+## 3 47.80507     0  17.89353         11         16
+## 4 46.30925     1  13.44451         11         12
+## 5 45.79170     1  14.20151         15          9
+## 6 47.99726     0  18.92245         16         17
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-45'>
+  <h3>IV in R: run the IV regressions</h3>
+  <pre><code class="r">reg.tsls &lt;- tsls(wages ~ education, ~ meducation + feducation, data = educwages)
+reg.ivreg &lt;- ivreg(wages ~ education | meducation + feducation, data = educwages)
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-46'>
+  <h3>IV in R: summary, tsls()</h3>
+  <pre><code class="r">summary(reg.tsls)
+</code></pre>
+
+<pre><code>## 
+##  2SLS Estimates
+## 
+## Model Formula: wages ~ education
+## &lt;environment: 0x00000000070ab620&gt;
+## 
+## Instruments: ~meducation + feducation
+## &lt;environment: 0x00000000070ab620&gt;
+## 
+## Residuals:
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -3.95600 -1.03700  0.02553  0.00000  1.01700  4.48200 
+## 
+##                Estimate  Std. Error  t value   Pr(&gt;|t|)    
+## (Intercept) 31.73827721  0.39453950 80.44385 &lt; 2.22e-16 ***
+## education    0.95552363  0.02452756 38.95715 &lt; 2.22e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.4114347 on 998 degrees of freedom
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-47'>
+  <h3>IV in R: summary, ivreg()</h3>
+  <pre><code class="r">summary(reg.ivreg)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## ivreg(formula = wages ~ education | meducation + feducation, 
+##     data = educwages)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -3.95639 -1.03668  0.02553  1.01666  4.48205 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 31.73828    0.39454   80.44   &lt;2e-16 ***
+## education    0.95552    0.02453   38.96   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.411 on 998 degrees of freedom
+## Multiple R-Squared: 0.7312,  Adjusted R-squared: 0.731 
+## Wald test:  1518 on 1 and 998 DF,  p-value: &lt; 2.2e-16
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-48'>
+  <h3>IV in R: summary, ivreg()</h3>
+  <pre><code class="r">summary(reg.ivreg, diagnostics=T)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## ivreg(formula = wages ~ education | meducation + feducation, 
+##     data = educwages)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -3.95639 -1.03668  0.02553  1.01666  4.48205 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 31.73828    0.39454   80.44   &lt;2e-16 ***
+## education    0.95552    0.02453   38.96   &lt;2e-16 ***
+## 
+## Diagnostic tests:
+##                  df1 df2 statistic p-value    
+## Weak instruments   2 997    1546.9  &lt;2e-16 ***
+## Wu-Hausman         1 997     261.1  &lt;2e-16 ***
+## Sargan             1  NA       0.0   0.997    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.411 on 998 degrees of freedom
+## Multiple R-Squared: 0.7312,  Adjusted R-squared: 0.731 
+## Wald test:  1518 on 1 and 998 DF,  p-value: &lt; 2.2e-16
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-49'>
+  <h3>What is a good instrument?</h3>
+  <ul>
+<li><p>No statistical test will provide evidence on whether your instrument is working</p>
+
+<ul>
+<li>Importance of theory, knowledge of assignment mechanism</li>
+</ul></li>
+<li><p>The best instrument is a truly randomized instrument</p></li>
+<li><p>&quot;The most important potential problem is a bad instrument, that is, an instrument that is correlated with the omitted variables (or the error term in the structural equation of interest in the case of simultaneous equations).&quot; (Angrist and Krueger <a href="https://www.aeaweb.org/articles.php?doi=10.1257/jep.15.4.69">2001</a>, 79)</p></li>
+<li><p>A weak instrument is ... a weak instrument</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-50'>
+  <h3>Checklist (Sovey and Green <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2010.00477.x/abstract">2011</a>, 198)</h3>
+  <ul>
+<li>Model</li>
+<li>Independence</li>
+<li>Exclusion Restriction</li>
+<li>Instrument Strength</li>
+<li>Monotonicity</li>
+<li>SUTVA</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-51'>
+  <h3>Model</h3>
+  <ul>
+<li><p>Issue to address</p>
+
+<ul>
+<li>What is the estimand?</li>
+<li>Are the causal effects assumed to be homogenous or heterogeneous?</li>
+</ul></li>
+<li><p>Relevant evidence and argumentation </p>
+
+<ul>
+<li>Discuss whether other studies using different instruments or populations generate different results.</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-52'>
+  <h3>Independence</h3>
+  <ul>
+<li><p>Issue to address</p>
+
+<ul>
+<li>Explain why it is plausible to believe that the instrumental variable is unrelated to unmeasured causes of the dependent variable.</li>
+</ul></li>
+<li><p>Relevant evidence and argumentation </p>
+
+<ul>
+<li>Conduct a randomization check (e.g., an F-test) to look for unexpected correlations between the instrumental variables and other predetermined covariates.</li>
+<li>Look for evidence of differential attrition across treatment and control groups.</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-53'>
+  <h3>Exclusion Restriction</h3>
+  <ul>
+<li><p>Issue to address</p>
+
+<ul>
+<li>Explain why it is plausible to believe the instrumental variable has no direct effect on the outcome.</li>
+</ul></li>
+<li><p>Relevant evidence and argumentation </p>
+
+<ul>
+<li>Inspect the design and consider backdoor paths from the instrumental variable to the dependent variable.</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-54'>
+  <h3>Instrument Strength</h3>
+  <ul>
+<li><p>Issue to address</p>
+
+<ul>
+<li>How strongly does the instrument predict the endogenous independent variable after controlling for covariates?</li>
+</ul></li>
+<li><p>Relevant evidence and argumentation </p>
+
+<ul>
+<li>Check whether the F-test of the excluded instrumental variable is greater than 10.</li>
+<li>If not, check whethermaximum likelihood estimation generates similar estimates.</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-55'>
+  <h3>Monotonicity</h3>
+  <ul>
+<li><p>Issue to address</p>
+
+<ul>
+<li>Explain why it is plausible to believe there are no Defiers, that is, people who take the treatment if and only if they are assigned to the control group.</li>
+</ul></li>
+<li><p>Relevant evidence and argumentation </p>
+
+<ul>
+<li>Provide a theoretical justification or explain why the research design rules out Defiers (e.g., the treatment is not available to those in the control group).</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-56'>
+  <h3>SUTVA</h3>
+  <ul>
+<li><p>Issue to address</p>
+
+<ul>
+<li>Explain why it is plausible to assume that a given observation is unaffected by
+treatments assigned or received by other units.</li>
+</ul></li>
+<li><p>Relevant evidence and argumentation </p>
+
+<ul>
+<li>Assess whether there is evidence that treatment effects are transmitted by geographical proximity or proximity within social networks.</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-57'>
+  <h3>Conclusion</h3>
+  <ul>
+<li><p>The use of IV requires strong assumptions</p></li>
+<li><p>For experiments</p>
+
+<ul>
+<li>Less bad data</li>
+<li>Estimate treatment effect among compliers</li>
+</ul></li>
+<li><p>For natural experiments/observational studies</p>
+
+<ul>
+<li>Less good data</li>
+<li>Hard to find strong (and good) instrumental variables</li>
+</ul></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-58'>
+  <h3>Schedule</h3>
+  <ul>
+<li><p>Next week: Factor analysis </p>
+
+<ul>
+<li>With Robert</li>
+</ul></li>
+<li><p>Feedback on MA4: December 7 (Monday)</p>
+
+<ul>
+<li>Available at my office (<strong>after</strong> 2pm)</li>
+<li>Resubmission by December 10 (Wednesday!)</li>
+</ul></li>
+</ul>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="./frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="./frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'simple', 
+    transition: Reveal.getQueryHash().transition || 'fade', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: './frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: './frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: './frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: './frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="./widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="./highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>

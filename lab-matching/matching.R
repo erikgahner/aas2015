@@ -49,7 +49,7 @@ summary(fit)
 # Save a new column in the data frame lal with the propensity scores
 lal$pscores <- predict(fit, type="response")
 
-# Match observations using Nearest Neighborhood matching
+# Match observations using Nearest Neighbor matching
 matches <- matching(z=lal$treat, score=lal$pscores, replace=TRUE)
 
 # Create a new data frame with the matched observations
@@ -126,7 +126,7 @@ reg.matched <- lm(re78 ~ treat, data=matched)
 stargazer(reg.unmatched, reg.matched, type="text")
 
 # Use the MatchIt package to match observations
-# Nearest Neighborhood matching
+# Nearest Neighbor matching
 m.nn <- matchit(treat.f, method = "nearest", replace=TRUE, data = lal)
 m.nn.data <- match.data(m.nn)
 
