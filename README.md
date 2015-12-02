@@ -12,6 +12,7 @@ The content of the repository:
 - Teaching material (and .Rmd files needed to reproduce the slides)
 - Assignments provided to the students _prior_ to the lectures
 - Lab session material on R (lab 6) and matching (lab 7)
+- Material for mandatory assignment 4
 - An overview of the required and recommended readings (with links to gated and ungated versions when accessible)
 
 ## Slides
@@ -19,7 +20,7 @@ The content of the repository:
 - Lecture 10: [Experiments and Causal Inference](http://erikgahner.github.io/slides/aas2015-w10-experiments/experiments.html)
 - Lecture 11: [Matching and Propensity Scores](http://erikgahner.github.io/slides/aas2015-w11-matching/matching.html)
 - Lecture 12: [Regression Discontinuity Designs](http://erikgahner.github.io/slides/aas2015-w12-rdd/rdd.html)
-- Lecture 13: Instrumental Variable Regression
+- Lecture 13: [Instrumental Variable Regression](http://erikgahner.github.io/slides/aas2015-w13-iv/iv.html)
 
 ## Readings
 ### Lecture 10: Experiments and Causal Inference

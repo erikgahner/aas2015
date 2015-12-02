@@ -140,8 +140,12 @@ tail(pol)
 # The class should be a data frame
 class(pol)
 
-# Show votes in data frame. Note the dollar sign.
+# Show votes in data frame. Note the dollar sign (component selector).
 pol$vote
+
+pol[1, 1] # first row, first colun
+pol[1,] # first row
+pol[,1] # first column
 
 max(pol$vote)
 
