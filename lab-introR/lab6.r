@@ -53,7 +53,7 @@ y       # show the value of y
 # We can also combine numbers into vectors and lists
 c(2, 2, 2)
 
-# Let us save a numeric vector
+# Let us save a numeric vector. A vector is simply a collection of multiple values with the same type of data
 x <- c(14, 6, 23, 2)
 x
 x * 2
